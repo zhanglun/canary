@@ -1,0 +1,18 @@
+parser: "babel-eslint"
+
+plugins:
+  - babel
+  - html
+
+settings:
+  'html/html-extensions':
+    - '.hmtl'
+    - '.vue'
+
+env:
+  browser: true
+  node: true
+
+ecmaFeatures:
+  jsx: true
+  modules: true

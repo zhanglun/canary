@@ -12,6 +12,7 @@ const getAssetsVersion = () => {
 };
 
 router.get('/', async(ctx, next) => {
+  console.log('------>========!!!');
   const assetsVersion = getAssetsVersion();
   console.log(assetsVersion);
   await ctx.render('index', {

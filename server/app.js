@@ -8,7 +8,7 @@ const Router = require('./routers');
 const webpackDevMiddleware = require('koa-webpack-dev-middleware');
 const webpackHotMiddleware = require('koa-webpack-hot-middleware');
 const webpack = require('webpack');
-const webpackConfig = require('../tools/webpack.config');
+const webpackConfig = require('../tools/webpack.dev.config');
 
 const app = new Koa();
 
