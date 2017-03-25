@@ -38,7 +38,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue': '../node_modules/vue/dist/vue.js',
+      'vue': path.resolve('node_modules', 'vue/dist/vue.js'),
     },
   },
   plugins: [

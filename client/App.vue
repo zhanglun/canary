@@ -1,9 +1,11 @@
 <style lang="less">
-
+  .app {
+    background: orange;
+  }
 </style>
 <template>
   <div class="app">
-    <h1>Hello, App!!</h1>
+    <h1>Index</h1>
     <app-header></app-header>
   </div>
 </template>
