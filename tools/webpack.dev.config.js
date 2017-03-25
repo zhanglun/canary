@@ -7,6 +7,8 @@ const publicPath = 'http://localhost:3000/';
 const webpackBase = require('./webpack.base.config');
 
 const webpackDev = webpackMerge(webpackBase, {
+  devtool: 'eval',
+  // sourceMap: 'eval',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

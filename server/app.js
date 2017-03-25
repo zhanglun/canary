@@ -21,18 +21,21 @@ app.use(KoaStatic(path.resolve(__dirname, '../public')));
 // app.locals.debug = process.NODE_ENV == 'production';
 app.use(Router);
 
+const debug = process.NODE_ENV == 'production';
+
+
 const compiler = webpack(webpackConfig);
-  app.use(webpackDevMiddleware(compiler, {
-    publichPath: webpackConfig.output.publichPath,
-    // filename: webpackConfig.output.filename,
-    quite: false,
-    noInfo: false,
-    headers: { 'X-Custom-Header': 'yes' },
-    stats: {
-      colors: true
-    }
-  }));
-  app.use(webpackHotMiddleware(compiler));
+app.use(webpackDevMiddleware(compiler, {
+  publichPath: webpackConfig.output.publichPath,
+  // filename: webpackConfig.output.filename,
+  quite: false,
+  noInfo: false,
+  headers: { 'X-Custom-Header': 'yes' },
+  stats: {
+    colors: true
+  }
+}));
+app.use(webpackHotMiddleware(compiler));
 
 app.listen(3000, () => {
   console.log('Listen: ----->');

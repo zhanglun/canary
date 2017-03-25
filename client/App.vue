@@ -2,9 +2,14 @@
 
 </style>
 <template>
-  <h1>Hello, App!!</h1>
+  <div class="app">
+    <h1>Hello, App!!</h1>
+    <app-header></app-header>
+  </div>
 </template>
 <script>
+  import HeaderComponent from './components/Header.vue';
+
   export default {
     name: 'App',
     data() {
@@ -17,6 +22,9 @@
     },
     methods: {
 
+    },
+    components: {
+      'app-header': HeaderComponent,
     }
   }
 </script>

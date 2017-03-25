@@ -16,7 +16,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.js$/,
+        test: /.(js|vue)$/,
         loader: 'babel-loader',
         query: {
           presets: 'es2015',
@@ -31,7 +31,8 @@ module.exports = {
       // but use vue-loader for all *.vue files
       {
         test: /.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        include: [path.resolve(__dirname, '../client/')],
       },
     ]
   },
