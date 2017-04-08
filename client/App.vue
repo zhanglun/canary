@@ -7,10 +7,12 @@
   <div class="app">
     <h1>Index</h1>
     <app-header></app-header>
+    <app-content></app-content> 
   </div>
 </template>
 <script>
   import HeaderComponent from './components/Header.vue';
+  import ContentComponent from './components/Content.vue';
 
   export default {
     name: 'App',
@@ -27,6 +29,7 @@
     },
     components: {
       'app-header': HeaderComponent,
+      appContent: ContentComponent,
     }
   }
 </script>

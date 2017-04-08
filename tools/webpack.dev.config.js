@@ -16,5 +16,5 @@ const webpackDev = webpackMerge(webpackBase, {
     new AssetsJSONPlugin({ filename: 'assets.json', path: path.resolve(__dirname, '../public') }),
   ],
 });
-
+console.log('webpack go ====>');
 module.exports = webpackDev;

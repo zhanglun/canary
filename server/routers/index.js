@@ -18,4 +18,9 @@ router.get('/', async(ctx, next) => {
   });
 });
 
+router.get('/api', async(ctx, next) => {
+	const result = {name: '123'};
+	await result;
+});
+
 module.exports = router.routes();
