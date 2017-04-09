@@ -3,7 +3,7 @@
 </style>
 <template>
   <div class="header">
-    header
+    header 哈哈哈哈
   </div>
 </template>
 <script>
