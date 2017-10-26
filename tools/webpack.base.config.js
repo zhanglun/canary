@@ -24,13 +24,13 @@ module.exports = {
       },
       {
         enforce: 'pre',
-        test: /.vue$/,
+        test: /\.(js|vue)$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
+        exclude: [path.resolve(__dirname, '../node_modules/')],
       },
       // but use vue-loader for all *.vue files
       {
-        test: /.vue$/,
+        test: /\.vue$/,
         loader: 'vue-loader',
         include: [path.resolve(__dirname, '../client/')],
       },
