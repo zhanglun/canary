@@ -5,10 +5,10 @@ const server =  http.createServer({
 	hostname: 'localhost',
   port: 3000,
   // path: '/',
-  agent: agent  
+  agent: agent
 }, () => {
 	console.log(arguments);
 });
-// server.listen(3001, () => {
-// 	console.log('server start listening: 3001');
-// });
+server.listen(3001, () => {
+	console.log('server start listening: 3000');
+});
