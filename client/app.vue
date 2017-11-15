@@ -13,6 +13,12 @@
           <m-dropdown-item>第一个选项</m-dropdown-item>
         </m-dropdown-menu>
       </m-dropdown>
+      <m-dropdown trigger="click">
+        按钮
+        <m-dropdown-menu slot="list">
+          <m-dropdown-item>第一个选项</m-dropdown-item>
+        </m-dropdown-menu>
+      </m-dropdown>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-  import popper from 'popper.js';
+  import Popper from 'popper.js';
 
   export default {
     name: 'base-drop',
@@ -21,7 +21,44 @@
     },
     watch: {},
     computed: {},
-    methods: {},
+    methods: {
+      createPopper() {
+
+        let reference = this.$parent.$refs.reference;
+        let poperElem = this.$el;
+
+        let options = {
+          gpuAcceleration: false,
+          // placement: this.placement,
+          boundariesPadding: 0,
+          forceAbsolute: true,
+          boundariesElement: 'body',
+          placement: 'left',
+          // modifiers: {
+          //   flip: {
+          //     behavior: ['left', 'bottom', 'top']
+          //   },
+          //   preventOverflow: {
+          //     boundariesElement: 'body',
+          //   },
+          // },
+        };
+        console.log(reference);
+        console.log(poperElem);
+        console.log(options);
+        this.popper = new Popper(reference, poperElem, options);
+        // this.popper.onCreate((popper) => {
+        //   console.log('this popper created!!!');
+        // });
+      },
+      update() {
+        this.popper ? this.popper.update() : this.createPopper();
+      },
+
+      destroy() {
+
+      },
+    },
     created() {
       this.$on('on-update-base-drop', this.update);
       this.$on('on-destroy-base-drop', this.destroy);

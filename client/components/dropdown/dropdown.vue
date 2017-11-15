@@ -8,7 +8,8 @@
       <slot></slot>
     </div>
     <transition>
-      <base-drop v-show="show">
+      <base-drop v-show="show" ref="drop"
+      :reference="this.$refs.reference">
         <div class="list">
           <slot name="list"></slot>
         </div>
@@ -46,11 +47,11 @@
       },
       show(update) {
         if (update) {
-          // this.$refs.drop.update();
+          this.$refs.drop.update();
         } else {
-          // this.$refs.drop.destroy();
+          this.$refs.drop.destroy();
         }
-        this.$emit('on-visible-change', update);
+        // this.$emit('on-visible-change', update);
       },
     },
     computed: {},
