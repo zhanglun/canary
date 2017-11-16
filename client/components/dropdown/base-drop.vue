@@ -28,20 +28,12 @@
         let poperElem = this.$el;
 
         let options = {
-          gpuAcceleration: false,
-          // placement: this.placement,
-          boundariesPadding: 0,
-          forceAbsolute: true,
-          boundariesElement: 'body',
-          placement: 'left',
-          // modifiers: {
-          //   flip: {
-          //     behavior: ['left', 'bottom', 'top']
-          //   },
-          //   preventOverflow: {
-          //     boundariesElement: 'body',
-          //   },
-          // },
+          placement: 'bottom',
+          modifiers: {
+            preventOverflow: {
+              boundariesElement: 'scrollParent',
+            },
+          },
         };
         console.log(reference);
         console.log(poperElem);

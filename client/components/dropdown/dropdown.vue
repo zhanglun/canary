@@ -1,9 +1,16 @@
 <style lang="less">
 
-
+  .dropdown {
+    .trigger {
+      width: 200px;
+      border: 1px solid #e1e1e1;
+      padding: 10px;
+      text-align: center;
+    }
+  }
 </style>
 <template>
-  <div @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+  <div @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" class="dropdown">
     <div class="trigger" ref="reference" @click="handleTriggerClick">
       <slot></slot>
     </div>

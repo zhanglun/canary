@@ -2,10 +2,15 @@
   .app {
     background: orange;
   }
+  .box {
+    height: 100px;
+    background: greenyellow;
+  }
 </style>
 <template>
   <div class="app">
     <h1>Index</h1>
+    <div class="box"></div>
     <div>
       <m-dropdown>
         按钮
@@ -14,9 +19,15 @@
         </m-dropdown-menu>
       </m-dropdown>
       <m-dropdown trigger="click">
-        按钮
+        按钮2
         <m-dropdown-menu slot="list">
-          <m-dropdown-item>第一个选项</m-dropdown-item>
+          <m-dropdown-item>第一个选项2</m-dropdown-item>
+        </m-dropdown-menu>
+      </m-dropdown>
+      <m-dropdown trigger="click">
+        按钮3
+        <m-dropdown-menu slot="list">
+          <m-dropdown-item>第一个选项2</m-dropdown-item>
         </m-dropdown-menu>
       </m-dropdown>
     </div>
