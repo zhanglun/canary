@@ -8,9 +8,11 @@
       <select name="" id="" v-model="language">
         <option :value="item.id" v-for="(item, i) in languageList">{{item.id}}</option>
       </select>
+      <button @click="getValue">get value</button>
       <tango
         height="600"
         srcPath=""
+        theme='vs'
         :language="language"
         :value="value"
         :editorOptions="options"
@@ -50,6 +52,10 @@
 
       onValueChange() {
       },
+
+      getValue() {
+        console.log(this.value);
+      }
     },
     mounted() {
     },
