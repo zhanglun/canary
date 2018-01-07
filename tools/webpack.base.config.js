@@ -40,7 +40,6 @@ module.exports = {
   resolve: {
     alias: {
       'vue': path.resolve('node_modules', 'vue/dist/vue.js'),
-      // 'vs': path.resolve('node_modules', 'monaco-editor/dev/vs'),
     },
   },
   plugins: [

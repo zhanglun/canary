@@ -8,7 +8,6 @@ const webpackBase = require('./webpack.base.config');
 
 const webpackDev = webpackMerge(webpackBase, {
   devtool: 'eval',
-  // sourceMap: 'eval',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
@@ -16,5 +15,5 @@ const webpackDev = webpackMerge(webpackBase, {
     new AssetsJSONPlugin({ filename: 'assets.json', path: path.resolve(__dirname, '../public') }),
   ],
 });
-console.log('webpack go ====>');
+
 module.exports = webpackDev;
