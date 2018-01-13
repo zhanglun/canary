@@ -12,7 +12,6 @@ controller
   .get('/vols', async (ctx, next) => {
     let query = ctx.query;
 
-    console.log(query);
     query = Object.assign({
       page_size: 10,
       page: 1,

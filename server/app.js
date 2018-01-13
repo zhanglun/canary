@@ -9,9 +9,6 @@ const webpack = require('webpack');
 const webpackConfig = require('../tools/webpack.dev.config');
 const Router = require('./routers');
 
-const Model = require('./models');
-// const MusicModel = require('./models/luoo');
-
 const app = new Koa();
 
 app.use(views(path.join(__dirname, './views'), {
@@ -21,25 +18,27 @@ app.use(static(path.resolve(__dirname, '../public')));
 app.use(logger());
 app.use(Router);
 
-const luooModel = new Model(app);
+const debug = process.NODE_ENV == 'development';
 
-// app.luooModel = luooModel;
-// app.musicModel = new MusicModel(app);
+if (debug) {
+  const compiler = webpack(webpackConfig);
 
-const debug = process.NODE_ENV == 'production';
-
-// const compiler = webpack(webpackConfig);
-//
-// app.use(webpackDevMiddleware(compiler, {
-//   publichPath: webpackConfig.output.publichPath,
-//   quite: false,
-//   noInfo: false,
-//   headers: { 'X-Custom-Header': 'yes', },
-//   stats: {
-//     colors: true,
-//   },
-// }));
-// app.use(webpackHotMiddleware(compiler));
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    quite: false,
+    noInfo: false,
+    headers: { 'X-Custom-Header': 'yes', },
+    stats: {
+      colors: true,
+    },
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000,
+      ignored: [/node_modules/, /server/],
+    },
+  }));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 app.listen(3000, () => {
   console.log('Listen: -----> Canary listen at localhost:3000');
