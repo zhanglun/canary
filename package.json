@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^2.2.0",
+    "koa-logger": "^3.1.0",
     "koa-router": "^7.0.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
     "monaco-editor": "^0.10.1",
+    "mysql": "github:mysqljs/mysql",
     "popper.js": "^1.12.6",
     "pug": "^2.0.0-beta11",
     "vue": "^2.2.5",
