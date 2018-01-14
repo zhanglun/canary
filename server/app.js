@@ -22,6 +22,16 @@ app.use(static(path.resolve(__dirname, '../public')));
 app.use(logger());
 app.use(Router);
 
+app.use(async (ctx, next) => {
+  let body = ctx.body;
+
+  ctx.body = {
+    code: 0,
+    message: 'ok',
+    data: body,
+  };
+});
+
 // const debug = process.NODE_ENV == 'development';
 const debug = true;
 
