@@ -9,6 +9,10 @@ const webpack = require('webpack');
 const webpackConfig = require('../tools/webpack.dev.config');
 const Router = require('./routers');
 
+const env = process.NODE_ENV || 'development';
+const debug = env == 'development';
+console.log(debug);
+
 const app = new Koa();
 
 app.use(async (ctx, next) => {
@@ -32,8 +36,6 @@ app.use(async (ctx, next) => {
   };
 });
 
-// const debug = process.NODE_ENV == 'development';
-const debug = true;
 
 //
 // app.use(async (ctx, next) => {
@@ -65,6 +67,6 @@ if (debug) {
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.listen(3000, () => {
-  console.log('Listen: -----> Canary listen at localhost:3000');
+app.listen(9527, () => {
+  console.log('Listen: -----> Canary listen at localhost:9527');
 });
