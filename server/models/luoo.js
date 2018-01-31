@@ -20,6 +20,16 @@ class MusicModel extends Base {
     return result;
   }
 
+  async getVolById(id) {
+    let sql = `SELECT * FROM ${this.tableVol}  WHERE id = ${id}`;
+
+    console.log(sql);
+
+    let result = await this.query(sql, [this.tableVol, id]);
+
+    return result[0];
+  }
+
 }
 
 module.exports = MusicModel;

@@ -8,8 +8,6 @@ class Service {
   async getVols(params = {page_size: 10, page: 1}) {
     let options = {};
 
-    console.log(params);
-
     options.limit = params.page_size;
     options.offset = params.page_size * (params.page - 1);
 
@@ -18,6 +16,12 @@ class Service {
 
 
     let result = await this.model.getVols(options);
+
+    return result;
+  }
+
+  async getVolById(id) {
+    let result = await this.model.getVolById(id);
 
     return result;
   }
