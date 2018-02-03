@@ -11,7 +11,6 @@ const Router = require('./routers');
 
 const env = process.NODE_ENV || 'development';
 const debug = env == 'development';
-console.log(debug);
 
 const app = new Koa();
 
@@ -47,7 +46,7 @@ app.on('error', err => {
   console.log('server error', err)
 });
 
-if (debug) {
+if (!debug) {
   const compiler = webpack(webpackConfig);
 
   app.use(webpackDevMiddleware(compiler, {

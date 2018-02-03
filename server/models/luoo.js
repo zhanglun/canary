@@ -14,20 +14,38 @@ class MusicModel extends Base {
    * @returns {Promise<*>}
    */
   async getVols(options = {limit: 10, offset: 0}) {
-    let sql = `SELECT * FROM ${this.tableVol} ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
+    let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await this.query(sql, [this.tableVol]);
 
     return result;
   }
 
+  /**
+   * 通过ID获取期刊列表
+   * @param  {String} id 
+   * @return {[type]}    [description]
+   */
   async getVolById(id) {
-    let sql = `SELECT * FROM ${this.tableVol}  WHERE id = ${id}`;
-
-    console.log(sql);
-
+    let sql = `SELECT * FROM ??  WHERE vol_id = ?`;
     let result = await this.query(sql, [this.tableVol, id]);
 
-    return result[0];
+    let vol = result[0];
+    if (vol) {
+      let tracks = await this.getTracksByVolId(id);
+
+      vol.tracks = tracks;
+    }
+
+    return vol || {};
+  }
+
+  async getTracksByVolId (id) {
+    let sql = `SELECT * FROM ??  WHERE vol_id = ?`;
+    let result = await this.query(sql, [this.tableTrack, id]);
+
+    console.log(result);
+
+    return result;
   }
 
 }

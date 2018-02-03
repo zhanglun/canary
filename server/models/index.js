@@ -1,6 +1,12 @@
 const mysql = require('mysql');
 const config = require('../config/config');
-let { connectionLimit, host, user, password, database } = config.development.mysql;
+let {
+  connectionLimit,
+  host,
+  user,
+  password,
+  database
+} = config.development.mysql;
 
 const pool = mysql.createPool({
   connectionLimit,
@@ -15,16 +21,25 @@ class Model {
     this.pool = pool;
   }
 
-  async query(sql) {
+  /**
+   * 执行 SQL 语句
+   * @param  {String} sql    [description]
+   * @param  {Array} params [description]
+   * @return {Promise}        [description]
+   */
+  async query(sql, params = []) {
     return new Promise((resolve, reject) => {
-      this.pool.query(sql, (err, result, fields) => {
+      let query = this.pool.query(sql, params, (err, result, fields) => {
         if (err) {
           reject(err);
+
+          throw err;
         }
 
         resolve(result);
       });
 
+      console.log('SQL: ', sql);
     });
   }
 
