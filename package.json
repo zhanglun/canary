@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/app.js --ignore client/ --ignore public/",
+    "server": "node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

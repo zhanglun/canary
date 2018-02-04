@@ -4,6 +4,10 @@ branches:
     - master
 node_js:
   - stable
+
+before_install:
+  - npm install
 script:
-  npm i
-  node server/app.js
+  - npm i
+  - npm run start
+  - node server/app.js
