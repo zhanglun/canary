@@ -43,6 +43,13 @@ class MusicModel extends Base {
     let sql = `SELECT * FROM ??  WHERE vol_id = ?`;
     let result = await this.query(sql, [this.tableTrack, id]);
 
+    return result;
+  }
+
+  async getTags() {
+    let sql = `SELECT tags FROM ?? `;
+    let result = await this.query(sql, [this.tableVol]);
+
     console.log(result);
 
     return result;

@@ -25,6 +25,24 @@ class Service {
 
     return result;
   }
+
+  async getTags() {
+    let result = await this.model.getTags();
+    let list = [];
+
+    let tagString = result.reduce((pre, cur, i, arr) => {
+      pre.tags = pre.tags + cur.tags;
+
+      return pre;
+    }).tags;
+
+    let tags = tagString.replace(/,/igm, '').split('#')
+      .filter((tag) => {
+        return tag;
+      });
+
+    return [...new Set(tags)];
+  }
 }
 
 module.exports = Service;

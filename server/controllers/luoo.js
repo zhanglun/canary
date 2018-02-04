@@ -21,10 +21,14 @@ controller
 
     ctx.body = result;
   })
-  // TODO: 获取单个vol详情
   .get('/vols/:vol_id', async (ctx, next) => {
     let { vol_id } = ctx.params;
     let result = await service.getVolById(vol_id);
+
+    ctx.body = result;
+  })
+  .get('/tags', async (ctx, next) =>{
+    let result = await service.getTags();
 
     ctx.body = result;
   });
