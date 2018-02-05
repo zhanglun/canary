@@ -7,7 +7,6 @@ node_js:
 
 before_install:
   - npm install
+
 script:
   - npm i
-  - npm run start
-  - node server/app.js
