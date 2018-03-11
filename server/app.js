@@ -14,33 +14,12 @@ const debug = env == 'development';
 
 const app = new Koa();
 
-app.use(async (ctx, next) => {
-  // ctx.set('Content-Type', 'application/json');
-  await next();
-});
 app.use(views(path.join(__dirname, './views'), {
   extension: 'pug'
 }));
 app.use(static(path.resolve(__dirname, '../public')));
 app.use(logger());
 app.use(Router);
-
-app.use(async (ctx, next) => {
-  let body = ctx.body;
-
-  ctx.body = {
-    code: 0,
-    message: 'ok',
-    data: body,
-  };
-});
-
-
-//
-// app.use(async (ctx, next) => {
-//   //will log the error as `InternalServerError: Error Message` and will return `Internal Server Error` as the response body
-//   ctx.throw(200, 'Error Message', { message:  JSON.stringify({data: 'Not Found!'})});
-// });
 
 app.on('error', err => {
   console.log('server error', err)
@@ -66,6 +45,6 @@ if (!debug) {
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.listen(9527, () => {
+app.listen(3000, () => {
   console.log('Listen: -----> Canary listen at localhost:9527');
 });
