@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const AssetsJSONPlugin = require('assets-webpack-plugin');
 const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
-const publicPath = 'http://localhost:3000/';
+const publicPath = 'http://localhost:8000/';
 const webpackBase = require('./webpack.base.config');
 
 const webpackDev = webpackMerge(webpackBase, {

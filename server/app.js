@@ -18,7 +18,6 @@ app.use(Router);
 
 app.use(async(ctx, next) => {
   app.logger.info('test');
-  console.log(ctx.logger);
   console.log(app.logger.info);
 });
 
