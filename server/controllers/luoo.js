@@ -18,7 +18,7 @@ controller
     }, query);
 
     let result = await service.getVols(query);
-
+    console.log('======>');
     ctx.body = result;
   })
   .get('/vols/:vol_id', async (ctx, next) => {
