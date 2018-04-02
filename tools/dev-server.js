@@ -30,6 +30,7 @@ app.use(webpackHotMiddleware(compiler));
 
 app.use((req, res, next) => {
   let options = {
+    path: req.url,
     host: 'localhost',
     port: 3000,
     headers: req.headers,
@@ -37,10 +38,10 @@ app.use((req, res, next) => {
   };
 
   const sreq = http.request(options, (sres) => {
-    // res.pipe(sres);
+    sres.pipe(res);
   });
 
-  sreq.pipe(req);
+  req.pipe(sreq);
 
 })
 
