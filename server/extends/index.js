@@ -1,11 +1,9 @@
 const services = require('../services');
 const logger = require('./logger');
 
-console.log(logger);
-
 module.exports = (app) => {
-  app.services = services;
-  app.context.services = services;
+  app.services = services(app);
+  app.context.services = services(app);
 
   app.logger = logger;
   app.context.logger = logger;

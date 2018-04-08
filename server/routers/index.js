@@ -2,7 +2,7 @@ const router = require('koa-router')();
 const path = require('path');
 const { readFileSync } = require('fs');
 
-const luooController = require('../controllers/luoo');
+const musicRouter = require('./music');
 
 const getAssetsVersion = () => {
   const filename = path.join(__dirname, '../../public/assets.json');
@@ -20,6 +20,6 @@ router.get('/', async(ctx, next) => {
   });
 });
 
-router.use('/api', luooController.routes());
+router.use('/api', musicRouter.routes());
 
 module.exports = router.routes();
