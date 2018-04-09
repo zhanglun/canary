@@ -29,13 +29,18 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler));
 
 app.use((req, res, next) => {
+  let headers = req.headers;
   let options = {
     path: req.url,
     host: 'localhost',
     port: 3000,
-    headers: req.headers,
+    headers,
     agent: new http.Agent(),
   };
+
+  if (req.url.indexOf('api')) {
+    res.type('application/json');
+  }
 
   const sreq = http.request(options, (sres) => {
     sres.pipe(res);
