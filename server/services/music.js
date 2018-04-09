@@ -1,6 +1,6 @@
 const Model = require('../models/luoo');
 
-class Service {
+class MusicService {
   constructor() {
     this.model = new Model();
   }
@@ -45,4 +45,4 @@ class Service {
   }
 }
 
-module.exports = Service;
+module.exports = MusicService;

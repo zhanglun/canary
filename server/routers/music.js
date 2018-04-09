@@ -8,7 +8,7 @@ let controller = new Controller();
 router
   .get('/', controller.getIndex)
   .get('/vols', controller.getVols)
-  .get('/vols/:vol_id', controller.getVolByVolId)
+  .get('/vols/:vol_id', controller.getVolsByVolId)
   .get('/tags', controller.getTags)
 ;
 

@@ -1,5 +1,17 @@
-cosnt MusicService = require('./music');
+const MusicService = require('./music');
 
-module.exports = (app) => {
-	music: new MusicService(app),
-};
+class Service {
+  constructor(app) {
+    this.app = app;
+  }
+
+  init() {
+    const { app } = this;
+
+    return {
+      music: new MusicService(app),
+    }
+  }
+}
+
+module.exports = Service;

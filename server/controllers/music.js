@@ -10,20 +10,20 @@ class MusicController {
       page: 1,
     }, query);
 
-    let result = await service.getVols(query);
+    let result = await ctx.app.services.music.getVols(query);
     console.log('======>');
     ctx.body = result;
   }
-  
+
   async getVolsByVolId(ctx, next) {
     let { vol_id } = ctx.params;
-    let result = await service.getVolById(vol_id);
+    let result = await ctx.app.services.music.getVolById(vol_id);
 
     ctx.body = result;
   }
 
   async getTags(ctx, next) {
-    let result = await service.getTags();
+    let result = await ctx.app.services.music.getTags();
 
     ctx.body = result;
   }
