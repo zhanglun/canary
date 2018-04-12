@@ -3,6 +3,7 @@ const path = require('path');
 const { readFileSync } = require('fs');
 
 const musicRouter = require('./music');
+const graphqlRouter = require('./graphql');
 
 const getAssetsVersion = () => {
   const filename = path.join(__dirname, '../../public/assets.json');
@@ -20,6 +21,8 @@ router.get('/', async(ctx, next) => {
   });
 });
 
+
 router.use('/api', musicRouter.routes());
+router.use('/graphql', graphqlRouter.routes())
 
 module.exports = router.routes();
