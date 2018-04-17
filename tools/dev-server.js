@@ -38,7 +38,7 @@ app.use((req, res, next) => {
     agent: new http.Agent(),
   };
 
-  if (req.url.indexOf('api')) {
+  if (req.url.indexOf('api') != -1) {
     res.type('application/json');
   }
 
