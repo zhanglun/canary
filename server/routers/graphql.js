@@ -10,7 +10,6 @@ const schema = buildSchema(`
     quoteOfTheDay: String
     random: Float!
     rollThreeDice: [Int]
-    vol: {}
   }
 `);
 
@@ -24,9 +23,6 @@ const root = {
   },
   rollThreeDice: () => {
     return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
-  },
-  vol: async () => {
-    return await musicService.getVols();
   },
 };
 router.all('/', graphqlHTTP({
