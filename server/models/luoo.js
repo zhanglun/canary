@@ -1,8 +1,6 @@
-const Base = require('./index');
-
-class MusicModel extends Base {
-  constructor(){
-    super();
+class MusicModel {
+  constructor(app){
+    this.app = app;
 
     this.tableVol = 'vol';
     this.tableTrack = 'track';
@@ -13,21 +11,21 @@ class MusicModel extends Base {
    * 获取期刊
    * @returns {Promise<*>}
    */
-  async getVols(options = {limit: 10, offset: 0}) {
+  async getVols(options = { limit: 10, offset: 0 }) {
     let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
-    let result = await this.query(sql, [this.tableVol]);
+    let result = await this.app.mysql.query(sql, [this.tableVol]);
 
     return result;
   }
 
   /**
    * 通过ID获取期刊列表
-   * @param  {String} id 
+   * @param  {String} id
    * @return {[type]}    [description]
    */
   async getVolById(id) {
     let sql = `SELECT * FROM ??  WHERE vol_id = ?`;
-    let result = await this.query(sql, [this.tableVol, id]);
+    let result = await this.app.mysql.query(sql, [this.tableVol, id]);
 
     let vol = result[0];
     if (vol) {
@@ -41,14 +39,14 @@ class MusicModel extends Base {
 
   async getTracksByVolId (id) {
     let sql = `SELECT * FROM ??  WHERE vol_id = ?`;
-    let result = await this.query(sql, [this.tableTrack, id]);
+    let result = await this.app.mysql.query(sql, [this.tableTrack, id]);
 
     return result;
   }
 
   async getTags() {
     let sql = `SELECT tags FROM ?? `;
-    let result = await this.query(sql, [this.tableVol]);
+    let result = await this.app.mysql.query(sql, [this.tableVol]);
 
     console.log(result);
 

@@ -10,8 +10,9 @@ class MusicController {
       page: 1,
     }, query);
 
-    let result = await ctx.app.services.music.getVols(query);
     console.log('======>');
+    let result = await ctx.app.services.music.getVols(query);
+
     ctx.body = result;
   }
 

@@ -1,8 +1,6 @@
-const Model = require('../models/luoo');
-
 class MusicService {
-  constructor() {
-    this.model = new Model();
+  constructor(app) {
+    this.app = app;
   }
 
   async getVols(params = {page_size: 10, page: 1}) {
@@ -14,20 +12,22 @@ class MusicService {
     options.order_by = params.order_by || 'vol_number';
     options.order = params.order || 'desc';
 
-
-    let result = await this.model.getVols(options);
+    console.log('services');
+    // let result = await this.app.models.music.getVols(options);
+    let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
+    let result = await this.app.mysql.query(sql, ['vol'])
 
     return result;
   }
 
   async getVolById(id) {
-    let result = await this.model.getVolById(id);
+    let result = await this.app.models.music.getVolById(id);
 
     return result;
   }
 
   async getTags() {
-    let result = await this.model.getTags();
+    let result = await this.app.models.music.getTags();
     let list = [];
 
     let tagString = result.reduce((pre, cur, i, arr) => {

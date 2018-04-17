@@ -11,18 +11,36 @@ const schema = buildSchema(`
     random: Float!
     rollThreeDice: [Int]
   }
+  type RandomDie {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
 `);
+
+// 该类继承 RandomDie GraphQL 类型
+class RandomDie {
+  constructor(numSides) {
+    this.numSides = numSides;
+  }
+
+  rollOnce() {
+    return 1 + Math.floor(Math.random() * this.numSides);
+  }
+
+  roll({numRolls}) {
+    var output = [];
+    for (var i = 0; i < numRolls; i++) {
+      output.push(this.rollOnce());
+    }
+    return output;
+  }
+}
 
 // root 将会提供每个 API 入口端点的解析函数
 const root = {
-  quoteOfTheDay: () => {
-    return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
-  },
-  random: () => {
-    return Math.random();
-  },
-  rollThreeDice: () => {
-    return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
+  getDie: function ({numSides}) {
+    return new RandomDie(numSides || 6);
   },
 };
 router.all('/', graphqlHTTP({
