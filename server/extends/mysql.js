@@ -2,7 +2,13 @@ const mysql = require('mysql');
 
 class Model {
   constructor(config) {
-    let { connectionLimit, host, user, password, database } = config;
+    let {
+      connectionLimit,
+      host,
+      user,
+      password,
+      database
+    } = config;
 
     this.pool = mysql.createPool({
       connectionLimit,
@@ -21,8 +27,7 @@ class Model {
    */
   async query(sql, params = []) {
     return new Promise((resolve, reject) => {
-      console.log(this.pool);
-      let query = this.pool.query(sql, params, (err, result, fields) => {
+      this.pool.query(sql, params, (err, result, fields) => {
         console.log(arguments);
         if (err) {
           reject(err);
@@ -30,7 +35,7 @@ class Model {
           throw err;
         }
 
-        resolve(result);
+        return resolve(result);
       });
 
       console.log('SQL: ', sql);

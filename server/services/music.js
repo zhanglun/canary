@@ -13,9 +13,11 @@ class MusicService {
     options.order = params.order || 'desc';
 
     console.log('services');
-    // let result = await this.app.models.music.getVols(options);
-    let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
-    let result = await this.app.mysql.query(sql, ['vol'])
+    let result = await this.app.models.music.getVols(options);
+    // let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
+    // let result = await this.app.mysql.query(sql, ['vol'])
+    // let result = [{}];
+    console.log(result);
 
     return result;
   }

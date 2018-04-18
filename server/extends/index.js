@@ -12,7 +12,6 @@ module.exports = (app) => {
   app.config = config;
 
   app.mysql = new Mysql(config.mysql);
-  app.context.mysql = app.mysql;
 
   app.models = model(app);
   app.context.models = model(app);

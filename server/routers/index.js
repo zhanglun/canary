@@ -23,6 +23,6 @@ router.get('/', async(ctx, next) => {
 
 
 router.use('/api', musicRouter.routes());
-router.use('/graphql', graphqlRouter.routes())
+// router.use('/graphql', graphqlRouter.routes())
 
 module.exports = router.routes();
