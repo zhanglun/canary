@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< Updated upstream
     "start": "node tools/dev-server.js & nodemon  -w ./server ./server/index.js",
+=======
+    "start": "node tools/dev-server.js & nodemon -w /server ./server/index.js",
+>>>>>>> Stashed changes
     "server": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +25,7 @@
     "log4js": "^2.5.3",
     "monaco-editor": "^0.10.1",
     "mysql": "^2.15.0",
+    "pino-multi-stream": "^3.1.2",
     "popper.js": "^1.12.6",
     "pug": "^2.0.0-beta11",
     "vue": "^2.2.5",

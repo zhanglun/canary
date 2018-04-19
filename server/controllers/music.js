@@ -10,8 +10,15 @@ class MusicController {
       page: 1,
     }, query);
 
-    console.log('======>');
-    let result = await ctx.app.services.music.getVols(query);
+    let options = {};
+
+    options.limit = query.page_size;
+    options.offset = query.page_size * (query.page - 1);
+
+    options.order_by = query.order_by || 'vol_number';
+    options.order = query.order || 'desc';
+
+    let result = await ctx.app.models.music.getVols(options);
 
     ctx.body = result;
   }

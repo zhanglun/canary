@@ -1,22 +1,20 @@
-const logger = require('./logger');
-const config = require('./config');
-const Mysql = require('./mysql');
-const model = require('../models');
-const service = require('../services');
+const services = require('../services');
+const models = require('../models');
+const Logger = require('./logger');
+const MySQLExtend = require('./mysql');
 
 module.exports = (app) => {
+  const logger = new Logger(app);
   app.logger = logger;
   app.context.logger = logger;
 
-  app.logger.info(config);
-  app.config = config;
+  app.mysql = new MySQLExtend();
 
-  app.mysql = new Mysql(config.mysql);
+  const model = models(app);
+  app.models = model;
+  app.context.models = model;
 
-  app.models = model(app);
-  app.context.models = model(app);
-
-  app.services = service(app);
-  app.context.services = service(app);
-
+  const service = services(app);
+  app.services = service;
+  app.context.services = service;
 };

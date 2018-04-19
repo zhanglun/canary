@@ -7,6 +7,8 @@ const appExtends = require('./extends');
 
 const app = new Koa();
 
+app.root = path.resolve(__dirname, '../');
+
 appExtends(app);
 
 app.use(views(path.join(__dirname, './views'), {

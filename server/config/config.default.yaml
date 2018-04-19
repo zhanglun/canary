@@ -1,6 +1,7 @@
 mysql:
-  connectionLimit: 10,
+  connectionLimit: 10
   host: 'localhost'
   port: ''
   user: 'root'
+  password: ''
   database: 'music'

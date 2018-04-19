@@ -1,7 +1,6 @@
 class MusicModel {
   constructor(app){
     this.app = app;
-
     this.tableVol = 'vol';
     this.tableTrack = 'track';
   }

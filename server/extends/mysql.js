@@ -1,22 +1,10 @@
 const mysql = require('mysql');
+const config = require('./config')();
+const pool = mysql.createPool(config.mysql);
 
 class Model {
-  constructor(config) {
-    let {
-      connectionLimit,
-      host,
-      user,
-      password,
-      database
-    } = config;
-
-    this.pool = mysql.createPool({
-      connectionLimit,
-      host,
-      user,
-      password,
-      database,
-    });
+  constructor() {
+    this.pool = pool;
   }
 
   /**
@@ -35,7 +23,7 @@ class Model {
           throw err;
         }
 
-        return resolve(result);
+        resolve(result);
       });
 
       console.log('SQL: ', sql);
@@ -43,6 +31,5 @@ class Model {
   }
 
 }
-
 
 module.exports = Model;

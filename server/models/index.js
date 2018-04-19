@@ -1,7 +1,7 @@
-const Music = require('./luoo');
+const MusicService = require('./music');
 
-module.exports = function(app) {
+module.exports = function (app) {
   return {
-    music: new Music(app),
+    music: new MusicService(app),
   }
 };
