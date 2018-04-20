@@ -3,7 +3,8 @@ const config = require('./config')();
 const pool = mysql.createPool(config.mysql);
 
 class Model {
-  constructor() {
+  constructor(app) {
+    this.app = app;
     this.pool = pool;
   }
 
@@ -16,7 +17,6 @@ class Model {
   async query(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.pool.query(sql, params, (err, result, fields) => {
-        console.log(arguments);
         if (err) {
           reject(err);
 
@@ -26,7 +26,7 @@ class Model {
         resolve(result);
       });
 
-      console.log('SQL: ', sql);
+      this.app.logger.info('SQL: ', sql);
     });
   }
 

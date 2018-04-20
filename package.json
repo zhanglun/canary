@@ -4,11 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< Updated upstream
-    "start": "node tools/dev-server.js & nodemon  -w ./server ./server/index.js",
-=======
     "start": "node tools/dev-server.js & nodemon -w /server ./server/index.js",
->>>>>>> Stashed changes
     "server": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

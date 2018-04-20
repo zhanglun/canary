@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.logger = logger;
   app.context.logger = logger;
 
-  app.mysql = new MySQLExtend();
+  app.mysql = new MySQLExtend(app);
 
   const model = models(app);
   app.models = model;
