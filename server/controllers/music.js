@@ -18,9 +18,8 @@ class MusicController {
     options.order_by = query.order_by || 'vol_number';
     options.order = query.order || 'desc';
 
-    ctx.app.logger.info('ggg--->');
     let result = await ctx.app.models.music.getVols(options);
-    ctx.app.logger.info('ggg');
+
     ctx.body = result;
   }
 

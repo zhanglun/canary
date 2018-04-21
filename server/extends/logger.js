@@ -9,8 +9,8 @@ class Logger {
     pretty.pipe(process.stdout);
 
     const streams = [
-      {stream: pretty},
       {stream: fs.createWriteStream(`${this.app.root}/logs/${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}.log`)},
+      {stream: pretty},
     ];
     this.logger = pinoms({
       streams: streams,
