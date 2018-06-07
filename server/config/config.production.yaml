@@ -3,4 +3,5 @@ mysql:
   host: 'localhost'
   port: ''
   user: 'root'
+  password: ''
   database: 'music'
