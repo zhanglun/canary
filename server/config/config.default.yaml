@@ -1,3 +1,5 @@
+enableCluster: true
+
 mysql:
   connectionLimit: 10
   host: 'localhost'
