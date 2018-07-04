@@ -3,4 +3,13 @@ const config = require('./gulp.config')();
 const $ = require('gulp-load-plugins')({lazy: true});
 const args = require('yargs').argv;
 
-require('./tasks/js.task')(gulp, config, $, args);
+async function init() {
+  await require('./tasks/build')(gulp, config, $, args);
+  await require('./tasks/download')(gulp, config, $, args);
+}
+
+init();
+
+gulp.task('default', () => {
+  console.log('Please select the command specified')
+});

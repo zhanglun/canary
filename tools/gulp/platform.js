@@ -1,5 +1,5 @@
-import { basename, dirname, resolve, relative } from 'path';
-import { platform as getOsPlatform } from 'os';
+const { basename, dirname, resolve, relative } = require('path');
+const { platform: getOsPlatform, release } = require('os');
 
 function getNodeDownloadInfo(config, platform) {
   const version = config.getNodeVersion();
@@ -68,11 +68,14 @@ async function getVersionInfo({ isRelease, pkg }) {
   };
 }
 
-export async function getConfigs({ isRelaese }) {
+exports.getConfigs = async ({ isRelaese }) => {
   const pkgPath = resolve(__dirname, '../../package.json');
   const pkg = require(pkgPath);
   const repoRoot = dirname(pkgPath);
   const nodeVersion = pkg.engines.node;
+  const releaseVersion = pkg.version;
+  const clientPath = resolve(__dirname, '../../client');
+  const serverPath = resolve(__dirname, '../../server');
 
   const platforms = ['darwin', 'linux', 'windows'].map(createPlatform);
   const versionInfo = await getVersionInfo({
@@ -86,8 +89,20 @@ export async function getConfigs({ isRelaese }) {
       return pkg;
     }
 
+    getClientPath() {
+      return clientPath;
+    }
+
+    getServerPath() {
+      return serverPath;
+    }
+
     getNodeVersion() {
       return nodeVersion;
+    }
+
+    getReleaseVersion() {
+      return releaseVersion;
     }
 
     getRepoRelativePath(absolutePath) {

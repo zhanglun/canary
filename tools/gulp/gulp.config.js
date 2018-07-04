@@ -1,6 +1,7 @@
 const pkg = require('../../package.json');
+const platform = require('./platform');
 
-module.exports = function () {
+module.exports = async function () {
 	const root = process.cwd;
 	const path_client = '../../client';
   const path_server = '../../server';
@@ -8,11 +9,13 @@ module.exports = function () {
   const node_version = pkg.node_version;
   const release_version = pkg.version;
 
-  const config = {
+  let config = {
     path_server,
     path_client,
     root,
   };
+
+  config = Object.assign({}, config, await platform.getConfigs());
 
   return config;
 };
