@@ -1,26 +1,6 @@
 const { basename, dirname, resolve, relative } = require('path');
 const { platform: getOsPlatform, release } = require('os');
 
-function getNodeDownloadInfo(config, platform) {
-  const version = config.getNodeVersion();
-  const arch = platform.getNodeArch();
-
-  const downloadName = platform.isWindows()
-    ? 'win-x64/node.exe'
-    : `node-v${version}-${arch}.tar.gz`;
-
-  const downloadUrl = `https://npm.taobao.org/mirrors/node/v${version}/${downloadName}`;
-  const downloadPath = config.resolveFromRepo('.node_binaries', version, basename(downloadName));
-  const extractDir = config.resolveFromRepo('.node_binaries', version, arch);
-
-  return {
-    downloadUrl,
-    downloadName,
-    downloadPath,
-    extractDir,
-  };
-}
-
 function createPlatform(name) {
   return new class Platform {
     getName() {
@@ -62,13 +42,13 @@ async function getBuildNumber() {
 
 async function getVersionInfo({ isRelease, pkg }) {
   return {
-    buildSha: await execa.stdout('git', ['rev-parse', 'HEAD']),
+    buildSha: await exec.stdout('git', ['rev-parse', 'HEAD']),
     buildVersion: isRelease ? pkg.version : `${pkg.version}-SNAPSHOT`,
     buildNumber: await getBuildNumber(),
   };
 }
 
-exports.getConfigs = async ({ isRelaese }) => {
+exports.getConfigs = async ({ isRelease }) => {
   const pkgPath = resolve(__dirname, '../../package.json');
   const pkg = require(pkgPath);
   const repoRoot = dirname(pkgPath);
@@ -78,10 +58,10 @@ exports.getConfigs = async ({ isRelaese }) => {
   const serverPath = resolve(__dirname, '../../server');
 
   const platforms = ['darwin', 'linux', 'windows'].map(createPlatform);
-  const versionInfo = await getVersionInfo({
-    isRelease,
-    pkg,
-  });
+  // const versionInfo = await getVersionInfo({
+  //   isRelease,
+  //   pkg,
+  // });
 
 
   return new class Config {
@@ -156,6 +136,10 @@ exports.getConfigs = async ({ isRelaese }) => {
 
     resolveFromTarget(...subPaths) {
       return resolve(repoRoot, 'target', ...subPaths);
+    }
+
+    getNodeDownloadInfo() {
+      getNodeDownloadInfo(this, );
     }
   }();
 }
