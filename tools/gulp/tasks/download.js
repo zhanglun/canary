@@ -1,7 +1,7 @@
+const { basename, dirname, resolve, relative } = require('path');
+const { platform: getOsPlatform, release } = require('os');
 const download = require('download');
-const gulp = require('gulp');
-
-const ROOT = process.cwd;
+const signale = require('signale');
 
 function getNodeDownloadInfo(config, platform) {
   const version = config.getNodeVersion();
@@ -23,18 +23,21 @@ function getNodeDownloadInfo(config, platform) {
   };
 }
 
-function startDownload(url, path) {
-  return download(NODE_URL, NODE_PATH);
+function startDownload(url, path, platform) {
+  signale.pending('Start download node %s', platform.getName());
+
+  return download(url, path)
+    .then(() => {
+      signale.success('Downloaded! %s', platform.getName());
+    });
 }
 
 module.exports = async (gulp, config, plugins) => {
-  console.log('adfasdf config', config);
-
-  gulp.task('download:node', async (cb) => {
+  gulp.task('download', (cb) => {
     config.getPlatforms().map(async (platform) => {
       const { url, downloadPath, downloadName } = await getNodeDownloadInfo(config, platform)
 
-      await startDownload(url, downloadPath);
+      const result = await startDownload(url, downloadPath, platform);
     })
   });
 };

@@ -48,7 +48,7 @@ async function getVersionInfo({ isRelease, pkg }) {
   };
 }
 
-exports.getConfigs = async ({ isRelease }) => {
+async function getConfigs({ isRelease }){
   const pkgPath = resolve(__dirname, '../../package.json');
   const pkg = require(pkgPath);
   const repoRoot = dirname(pkgPath);
@@ -138,8 +138,10 @@ exports.getConfigs = async ({ isRelease }) => {
       return resolve(repoRoot, 'target', ...subPaths);
     }
 
-    getNodeDownloadInfo() {
-      getNodeDownloadInfo(this, );
-    }
   }();
 }
+
+exports.getConfigs = getConfigs;
+exports.createPlatform = createPlatform;
+exports.getVersionInfo = getVersionInfo;
+exports.getBuildNumber = getBuildNumber;

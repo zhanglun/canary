@@ -1,11 +1,11 @@
 const gulp = require('gulp');
-const config = require('./gulp.config')();
+const config = require('./tools/gulp/gulp.config');
 const $ = require('gulp-load-plugins')({lazy: true});
 const args = require('yargs').argv;
 
 async function init() {
-  await require('./tasks/build')(gulp, config, $, args);
-  await require('./tasks/download')(gulp, config, $, args);
+  require('./tools/gulp/tasks/download')(gulp, config, $, args);
+  require('./tools/gulp/tasks/build')(gulp, config, $, args);
 }
 
 init();
