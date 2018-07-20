@@ -8,14 +8,18 @@ ACTION=$1
 PORT=$2
 INDEX="$SERVER_PATH/server/index.js --port=$PORT"
 
+if [ ! -d "./logs" ]; then
+  mkdir ./logs
+fi
+
 if [ ! -d "./logs/stdout" ]; then
-  /bin/mkdir ./logs/stdout
+  mkdir ./logs/stdout
 fi
 
 #echo $INDEX
 start(){
 if [ -f $PID_FILE ];then
-   echo " process is already staring! "
+   echo "$PID_FILE process is already staring! "
 else
   echo "node start ======"
   $NODE $INDEX >> $LOG_NAME 2>&1 &  #将调试信息写入文件，并以后台的方式运行
@@ -34,8 +38,8 @@ if [ ! -f $PID_FILE ];then
   echo "node is not start yet!"
 else
   echo "node stop ======"
-  /bin/kill `/bin/cat $PID_FILE`
-  /bin/rm -rf $PID_FILE
+  kill `cat $PID_FILE`
+  rm -rf $PID_FILE
   if [ $? -eq 0 ];then
     echo "node stopped successfully!"
   else
