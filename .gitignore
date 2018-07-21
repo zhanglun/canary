@@ -2,5 +2,6 @@ node_modules/**
 public/**
 .idea/**
 logs/**
+dist/**
 .node_binaries/*
 canary.pid

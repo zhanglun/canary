@@ -41,7 +41,7 @@ function extratNodePackage() {
 module.exports = async (gulp, config, plugins) => {
   gulp.task('download', (cb) => {
     config.getPlatforms().map(async (platform) => {
-      const { url, downloadPath, downloadName } = await getNodeDownloadInfo(config, platform)
+      const { url, downloadPath, downloadName, extractDir } = await getNodeDownloadInfo(config, platform)
 
       const result = await startDownload(url, downloadPath, platform);
 

@@ -6,6 +6,7 @@ const args = require('yargs').argv;
 async function init() {
   require('./tools/gulp/tasks/download')(gulp, config, $, args);
   require('./tools/gulp/tasks/build')(gulp, config, $, args);
+  require('./tools/gulp/tasks/pack')(gulp, config, $, args);
 }
 
 init();

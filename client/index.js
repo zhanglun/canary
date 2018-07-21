@@ -9,5 +9,3 @@ const app = new Vue({
   router,
   render (h) { return h(AppView) }
 }).$mount('#app');
-
-console.log(111);

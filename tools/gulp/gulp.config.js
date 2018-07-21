@@ -37,7 +37,11 @@ module.exports = (function (args) {
   const nodeVersion = pkg.engines.node;
   const releaseVersion = pkg.version;
   const clientPath = resolve(__dirname, '../../client');
+  const publicPath = resolve(__dirname, '../../public');
   const serverPath = resolve(__dirname, '../../server');
+  const distPath = resolve(__dirname, '../../dist');
+  const distServerPath = resolve(__dirname, '../../dist/server');
+  const distPublicPath = resolve(__dirname, '../../dist/public');
 
   // const platformNames = ['darwin', 'linux', 'windows'];
   const platformNames = ['linux'];
@@ -45,12 +49,17 @@ module.exports = (function (args) {
 
   let config = {
     root,
+    pkgPath,
     pkg,
     repoRoot,
     nodeVersion,
     releaseVersion,
     clientPath,
     serverPath,
+    publicPath,
+    distPath,
+    distPublicPath,
+    distServerPath,
 
     platforms,
   };
