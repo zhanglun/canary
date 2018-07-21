@@ -39,8 +39,9 @@ module.exports = (function (args) {
   const clientPath = resolve(__dirname, '../../client');
   const serverPath = resolve(__dirname, '../../server');
 
-
-  const platforms = ['darwin', 'linux', 'windows'].map(createPlatform);
+  // const platformNames = ['darwin', 'linux', 'windows'];
+  const platformNames = ['linux'];
+  const platforms = platformNames.map(createPlatform);
 
   let config = {
     root,

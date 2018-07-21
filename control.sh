@@ -50,17 +50,17 @@ fi
 
 case $ACTION in
 start)
-        start
+  start
 ;;
 stop)
-        stop
+  stop
 ;;
 reload)
-        stop
-        /bin/sleep 3
-        start
+  stop
+  sleep 3
+  start
 ;;
 *)
-    echo "$0 Usage: [start|stop|reload]"
+  echo "$0 Usage: [start|stop|reload]"
 ;;
 esac

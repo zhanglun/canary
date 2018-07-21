@@ -12,6 +12,7 @@ function getNodeDownloadInfo(config, platform) {
     : `node-v${version}-${arch}.tar.gz`;
 
   const url = `https://npm.taobao.org/mirrors/node/v${version}/${downloadName}`;
+  console.log(basename(downloadName));
   const downloadPath = config.resolveFromRepo('.node_binaries', version, basename(downloadName));
   const extractDir = config.resolveFromRepo('.node_binaries', version, arch);
 
@@ -29,7 +30,12 @@ function startDownload(url, path, platform) {
   return download(url, path)
     .then(() => {
       signale.success('Downloaded! %s', platform.getName());
+      return path;
     });
+}
+
+function extratNodePackage() {
+
 }
 
 module.exports = async (gulp, config, plugins) => {
@@ -38,7 +44,9 @@ module.exports = async (gulp, config, plugins) => {
       const { url, downloadPath, downloadName } = await getNodeDownloadInfo(config, platform)
 
       const result = await startDownload(url, downloadPath, platform);
-    })
+
+      console.log(result);
+    });
   });
 };
 
