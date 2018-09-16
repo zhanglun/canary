@@ -1,18 +1,17 @@
-const path = require('path');
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const AssetsJSONPlugin = require('assets-webpack-plugin');
 const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
-const publicPath = 'http://localhost:8000/';
 const webpackBase = require('./webpack.base.config');
 
+Object.keys(webpackBase.entry).forEach((k) => {
+  webpackBase.entry[k].push(hotMiddlewareScript);
+});
+
 const webpackDev = webpackMerge(webpackBase, {
-  devtool: 'eval',
+  devtool: 'inline-source-map',
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin({multiStep: true}),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.HashedModuleIdsPlugin(),
-    new AssetsJSONPlugin({ filename: 'assets.json', path: path.resolve(__dirname, '../public') }),
   ],
 });
 

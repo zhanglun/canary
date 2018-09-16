@@ -1,39 +1,54 @@
-const clean = require('gulp-clean');
-const gulpSequence = require('gulp-sequence');
-const webpack = require('webpack');
-const webpackConfig = require('../../webpack.pro.config');
+const babel = require('gulp-babel');
+const runSequence = require('run-sequence');
+const webpack = require('webpack-stream');
+const webpackCofnig = require('../../webpack.pro.config.js');
 
-module.exports = async (gulp, config, plugins) => {
+module.exports = (gulp, common, plugins) => {
+  const { root } = common.build;
 
-  gulp.task('build:clean', function(cb) {
-    return gulp.src(config.distPath, { read: false })
-      .pipe(clean());
+  gulp.task('build:client', () => {
+    return gulp
+      .src(`${root}/client/index.js`)
+      .pipe(webpack(webpackCofnig))
+      .pipe(gulp.dest(`${root}/public/assets`));
   });
 
-  gulp.task('build:client', ['build:clean'], (callback) => {
-    console.log('build:client start');
-    webpack(webpackConfig, (err, stats) => {
-      if(err) {
-        throw new Error("webpack:build", err);
-      }
-
-      stats.toString({
-          colors: true
-      });
-
-      return gulp.src(config.publicPath + '/**/*', {base: '.'})
-        .pipe(gulp.dest(config.distPath));
-
-      callback();
-    });
+  gulp.task('build:copy', () => {
+    return gulp
+      .src(
+        [`${root}/public/**`, `${root}/package.json`, `${root}/control.sh`, `${root}/server/**/*`],
+        { base: `${root}` },
+      )
+      .pipe(gulp.dest('dist'));
   });
 
-  gulp.task('build:server', ['build:clean'], (cb) => {
-    console.log('build:server');
-    return gulp.src([config.serverPath + '/**/*', config.pkgPath], {base: '.'})
-    .pipe(gulp.dest(config.distPath));
+  gulp.task('build:server', ['build:copy'], () => {
+    return gulp
+      .src(`${root}/server/**/*.js`)
+      .pipe(
+        babel({
+          presets: ['env'],
+          plugins: [
+            'transform-object-rest-spread',
+            'transform-runtime',
+            'transform-decorators-legacy',
+          ],
+        }),
+      )
+      .pipe(gulp.dest('dist/server'));
   });
 
-
-  gulp.task('build', gulpSequence([ 'build:client', 'build:server' ]));
+  /**
+   * 打包项目
+   */
+  gulp.task('build', (cb) => {
+    runSequence(
+      'clean',
+      'build:client',
+      'build:copy',
+      'build:downloadNode',
+      'build:extractNode',
+      cb,
+    );
+  });
 };

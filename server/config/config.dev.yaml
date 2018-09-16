@@ -1,4 +1,4 @@
-enableCluster: true
+enableCluster: false
 
 port: 3000
 
@@ -8,5 +8,5 @@ mysql:
   port: ''
   user: 'root'
   password: ''
-  database: 'music'
+  database: 'house'
   debug: true

@@ -1,15 +1,18 @@
 const http = require('http');
+const portfinder = require('portfinder');
 const Express = require('express');
-const request = require('request');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('./webpack.dev.config');
+const app = require('../server/app');
+
+console.log(app.config);
+
 const compiler = webpack(webpackConfig);
+const server = new Express();
 
-const app = new Express();
-
-app.use(webpackDevMiddleware(compiler, {
+server.use(webpackDevMiddleware(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quite: false,
   noInfo: false,
@@ -26,20 +29,20 @@ app.use(webpackDevMiddleware(compiler, {
   },
 }));
 
-app.use(webpackHotMiddleware(compiler));
+server.use(webpackHotMiddleware(compiler));
 
-app.use((req, res, next) => {
+server.use((req, res, next) => {
   let headers = req.headers;
   let options = {
     path: req.url,
     host: 'localhost',
-    port: 3000,
+    port: app.config.port,
     headers,
     agent: new http.Agent(),
   };
 
   if (req.url.indexOf('api') != -1) {
-    res.type('application/json');
+    res.type('serverlication/json');
   }
 
   const sreq = http.request(options, (sres) => {
@@ -50,6 +53,9 @@ app.use((req, res, next) => {
 
 })
 
-app.listen(8888, () => {
-  console.log('8888');
-});
+portfinder.getPortPromise()
+  .then((port) => {
+    server.listen(port, () => {
+      console.log(`Dev Server Listening at: http://localhost:${port}`);
+    });
+  });

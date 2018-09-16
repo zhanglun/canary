@@ -7,14 +7,15 @@ const loadYaml = (name) => {
 };
 
 module.exports = function() {
+  let env = process.env.NODE_ENV === 'development' ? 'env' : process.env.NODE_ENV;
   let config = {
-    env: process.env.NODE_ENV || 'development',
+    env,
   };
 
   let defaultConfig = loadYaml('default');
   let envConfig = {};
 
-  ['dev', 'production'].map((env) => {
+  ['dev', 'test', 'production'].map((env) => {
     if (env === config.env) {
       envConfig = loadYaml(env);
     }

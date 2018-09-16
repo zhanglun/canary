@@ -1,0 +1,11 @@
+proseWrap: never
+tabWidth: 2
+singleQuote: true
+trailingComma: all
+arrowParens: always
+eslintIntegration: true
+stylelintIntegration: true
+printWidth: 100
+arrayBracketNewline: off
+arrayBracketSpacing: error
+arrayElementNewline: off

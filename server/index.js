@@ -3,7 +3,7 @@ const cluster = require('cluster');
 const argv = require('yargs').argv
 
 const app = require('./app');
-const port = argv.port || 8888;
+const port = argv.port || app.config.port;
 const numCPUs = os.cpus().length;
 
 if (app.config.enableCluster) {
@@ -43,8 +43,12 @@ if (app.config.enableCluster) {
       app.logger.info('[master] worker restrating...');
     });
   } else {
-    app.listen(port, () => {
+    module.exports = app.listen(port, () => {
       app.logger.info(`listen ${port}`);
     });
   }
+} else {
+    module.exports = app.listen(port, () => {
+      app.logger.info(`listen ${port}`);
+    });
 }

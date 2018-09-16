@@ -3,5 +3,7 @@ public/**
 .idea/**
 logs/**
 dist/**
-.node_binaries/*
-canary.pid
+.node_binaries
+target/
+build/
+bin/

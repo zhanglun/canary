@@ -1,18 +1,87 @@
-parser: "babel-eslint"
+    blockBindings: true
+    # 允许使用模块，模块内默认严格模式
+    modules: true
+    # 允许字面量定义对象时，用表达式做属性名
+    objectLiteralComputedProperties: true
+    objectLiteralShorthandMethods: true
+    objectLiteralShorthandProperties: true
+    restParams: true
+    spread: true
+    forOf: true
+    generators: true
+    templateStrings: true
+    superInFunctions: true
+    experimentalObjectRestSpread: true
+  sourceType: module
 
 plugins:
   - babel
   - html
 
 settings:
-  'html/html-extensions':
-    - '.hmtl'
-    - '.vue'
+  "html/html-extensions":
+    - ".html"
+    - ".vue"   # consider .html and .vue files as HTML
 
-env:
-  browser: true
-  node: true
-
-ecmaFeatures:
-  jsx: true
-  modules: true
+rules:
+  indent: # 一个缩进必须用四个空格替代, switch语句里面的case 2个空格
+    - error
+    - 2
+    - { SwitchCase: 1 }
+  linebreak-style: # 换行符指定unix风格
+    - error
+    - unix
+  quotes: # 单引号
+    - error
+    - single
+  no-console: # 允许使用console
+    - off
+  accessor-pairs: # getter和setter没有成对出现时给出警告
+    - warn
+  array-callback-return: # 对于数据相关操作函数比如reduce, map, filter等，callback必须有return
+    - error
+  class-methods-use-this: # 要求在Class里面合理使用this，如果某个方法没有使用this,则应该申明为静态方法
+    - false
+  default-case: # switch 必须包含一个 default
+    - error
+  no-alert: # 不允许有 alert
+    - warn
+  no-extend-native: # 禁止修改原生对象
+    - error
+  no-floating-decimal: # 表示小数时，禁止省略 0，比如 .5
+    - error
+  no-multi-spaces: # 禁止出现连续的多个空格，除非是注释前，或对齐对象的属性、变量定义、import 等
+    - error
+  no-multi-str: #禁止使用 / 来进行字符串换行
+    - error
+  no-useless-concat: # 禁止出现没必要的字符串拼接，比如 'hello' + 'world'，可以直接写成'hello world'
+    - error
+  no-warning-comments: # TODO 和 FIXME 类型的注释用的比较多，不限制
+    - off
+  prefer-promise-reject-errors: # Promise 的 reject方法必须传入 Error 对象，而不能是字面量
+    - error
+  radix: # parseInt的时候第二个参数必须传
+    - error
+  no-use-before-define: # 变量使用之前必须进行定义
+    - error
+  array-bracket-newline: # 数组前后括号必须换行的要求有点严格，不采纳
+    - off
+  array-bracket-spacing: # 数组的括号前后禁止有空格
+    - off
+  array-element-newline: # 数组里面的元素强制换行有点严格，不采纳
+    - off
+  block-spacing: # 代码块如果在一行，则大括号内的首尾必须有空格，比如 function (a, b) { retur a + b; }
+    - off
+  comma-spacing: # 逗号后面强制要求加空格
+    - error
+  new-cap: # 构造函数的必须以大写字母开头
+    - error
+  new-parens: # new 后面类必须带上括号
+    - error
+  max-params: # 函数的参数禁止超过 10 个
+    - error
+    - 10
+  no-unused-vars: # 变量声明但是未使用，给出警告。(暂时先不做严格限制)
+    - warn
+  no-mixed-spaces-and-tabs: # 禁止空格和tab混用
+    - error

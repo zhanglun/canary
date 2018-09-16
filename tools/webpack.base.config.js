@@ -1,13 +1,12 @@
 const path = require('path');
-const webpack = require('webpack');
-const AssetsJSONPlugin = require('assets-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
-const publicPath = 'http://localhost:8000/';
+const AssetsPlugin = require('assets-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const publicPath = '/assets/';
 
 module.exports = {
   entry: {
-    app: [path.resolve(__dirname, '../client/index.js'), hotMiddlewareScript],
+    vendor: ['vue', 'vue-router'],
+    app: [path.resolve(__dirname, '../client/index.js')],
   },
   output: {
     path: path.resolve(__dirname, '../public/assets'),
@@ -17,37 +16,40 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.(js|vue)$/,
-        loader: 'babel-loader',
-        query: {
-          presets: 'es2015',
-        },
-        exclude: '/node_modules/',
-      },
-      {
-        enforce: 'pre',
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        exclude: [path.resolve(__dirname, '../node_modules/')],
-      },
-      {
         test: /\.vue$/,
         loader: 'vue-loader',
-        include: [path.resolve(__dirname, '../client/'), 'node_modules/vue-monaco-editor'],
       },
-    ]
+    ],
   },
-  resolve: {
-    alias: {
-      'vue': path.resolve('node_modules', 'vue/dist/vue.js'),
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'all',
+          name: 'vendor',
+          filename: 'vendor.[hash].js',
+        },
+      },
     },
   },
   plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: 'node_modules/monaco-editor/min/vs',
-        to: 'vs',
-      }
-    ])
-  ]
+    new VueLoaderPlugin(),
+    new AssetsPlugin({
+      useCompilerPath: true,
+      filename: 'assets.json',
+    }),
+  ],
+  resolve: {
+    extensions: ['.js', '.json', '.vue', '.css', '.less'],
+    modules: [
+      path.resolve(__dirname, '../', 'node_modules'),
+      path.resolve(__dirname, '../', 'client'),
+      path.resolve(__dirname, '../', 'public'),
+    ],
+    alias: {
+      vue$: 'vue/dist/vue.js',
+    },
+  },
+  mode: 'development',
 };

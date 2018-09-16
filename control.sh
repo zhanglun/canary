@@ -1,12 +1,12 @@
 #!/bin/bash
 NODE=`which node`
 DATE=`date +%Y-%m-%d`
-PID_FILE="./canary.pid"
+PID_FILE="./bin/canary.pid"
 LOG_NAME="./logs/stdout/stdout-"${DATE}".log"
 SERVER_PATH=`/bin/pwd`
 ACTION=$1
 PORT=$2
-INDEX="$SERVER_PATH/server/index.js --port=$PORT"
+INDEX="$SERVER_PATH/server/index.js "
 
 if [ ! -d "./logs" ]; then
   mkdir ./logs
@@ -16,7 +16,9 @@ if [ ! -d "./logs/stdout" ]; then
   mkdir ./logs/stdout
 fi
 
-#echo $INDEX
+echo 'index'
+echo $INDEX
+
 start(){
 if [ -f $PID_FILE ];then
    echo "$PID_FILE process is already staring! "
