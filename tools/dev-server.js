@@ -42,7 +42,7 @@ server.use((req, res, next) => {
   };
 
   if (req.url.indexOf('api') != -1) {
-    res.type('serverlication/json');
+    res.type('application/json');
   }
 
   const sreq = http.request(options, (sres) => {
