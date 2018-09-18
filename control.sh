@@ -1,6 +1,11 @@
 #!/bin/bash
 NODE=`which node`
 DATE=`date +%Y-%m-%d`
+
+if [ ! -d "./bin" ]; then
+  mkdir ./bin
+fi
+
 PID_FILE="./bin/canary.pid"
 LOG_NAME="./logs/stdout/stdout-"${DATE}".log"
 SERVER_PATH=`/bin/pwd`

@@ -1,37 +1,24 @@
 const fs = require('fs');
+const path = require('path');
 const pinoms = require('pino-multi-stream');
+const config = require('../config');
 
 class Logger {
-  constructor(app) {
-    this.app = app;
-
+  constructor() {
     let pretty = pinoms.pretty();
+
     pretty.pipe(process.stdout);
 
     const streams = [
-      {stream: fs.createWriteStream(`${this.app.root}/logs/${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}.log`)},
+      {stream: fs.createWriteStream(path.resolve(__dirname, `../../logs/${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}.log`))},
       {stream: pretty},
     ];
     this.logger = pinoms({
       streams: streams,
     });
-  }
 
-  info(...args) {
-    this.logger.info(...args);
-  }
-
-  error(...args) {
-    this.logger.error(...args);
-  }
-
-  debug(...args) {
-    this.logger.debug(...args);
-  }
-
-  trace(...args) {
-    this.logger.trace(...args);
+    return this.logger;
   }
 }
 
-module.exports = Logger;
+module.exports = new Logger();

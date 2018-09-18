@@ -1,3 +1,4 @@
+const mysql = require('../../extends/mysql');
 class MusicModel {
   constructor(app){
     this.app = app;

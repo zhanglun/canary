@@ -1,13 +1,14 @@
 const mysql = require('mysql');
 const Emitter = require('events');
-const debug = require('debug')('hybrid');
+const debug = require('debug')('cancay');
+const config = require('../config');
 
 class MySQLExtends extends Emitter {
   constructor(app) {
     super();
 
     this.app = app;
-    this.config = app.config.mysql;
+    this.config = config.mysql;
     this.logger = app.logger;
 
     const { host, user, database } = this.config;
@@ -130,8 +131,6 @@ class MySQLExtends extends Emitter {
       });
     });
   }
-
-
 
 }
 

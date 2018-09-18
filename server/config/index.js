@@ -3,7 +3,7 @@ const path = require('path');
 const jsYaml = require('js-yaml');
 
 const loadYaml = (name) => {
-  return jsYaml.safeLoad(fs.readFileSync(path.join(__dirname, `../config/config.${name}.yaml`), 'utf-8'));
+  return jsYaml.safeLoad(fs.readFileSync(path.join(__dirname, `./config.${name}.yaml`), 'utf-8'));
 };
 
 module.exports = function() {
@@ -24,4 +24,4 @@ module.exports = function() {
   config = Object.assign({}, config, defaultConfig, envConfig);
 
   return config;
-};
+}();

@@ -1,4 +1,4 @@
-const debug = require('debug')('hybrid');
+const debug = require('debug')('cancay');
 const path = require('path');
 const glob = require('glob');
 const router = require('koa-router')();

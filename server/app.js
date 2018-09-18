@@ -5,13 +5,15 @@ const bodyParser = require('koa-bodyparser');
 const views = require('koa-views');
 const Router = require('./router');
 const moduleLoader = require('./loader/router');
-const appExtends = require('./extends');
+const logger = require('./extends/logger');
+const config = require('./config');
 
 const app = new Koa();
 
 app.root = path.resolve(__dirname, '../');
 
-appExtends(app);
+app.logger = logger;
+app.config = config;
 
 app.use(views(path.join(__dirname, './views'), {
   extension: 'pug'

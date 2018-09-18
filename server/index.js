@@ -1,12 +1,13 @@
 const os = require('os');
 const cluster = require('cluster');
 const argv = require('yargs').argv
+const config = require('./config');
 
 const app = require('./app');
-const port = argv.port || app.config.port;
+const port = argv.port || config.port;
 const numCPUs = os.cpus().length;
 
-if (app.config.enableCluster) {
+if (config.enableCluster) {
   if (cluster.isMaster) {
     app.logger.info('[master] start...');
 
