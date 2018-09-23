@@ -1,3 +1,22 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  node: true
+extends:
+  - 'eslint:recommended'
+parser: babel-eslint
+parserOptions:
+  ecmaVersion: 6
+  ecmaFeatures:
+    # lambda表达式
+    arrowFunctions: true
+    # 解构赋值
+    destructuring: true
+    # class
+    classes: true
+    defaultParams: true
+    # 块级作用域，允许使用let const
     blockBindings: true
     # 允许使用模块，模块内默认严格模式
     modules: true
@@ -41,7 +60,7 @@ rules:
   array-callback-return: # 对于数据相关操作函数比如reduce, map, filter等，callback必须有return
     - error
   class-methods-use-this: # 要求在Class里面合理使用this，如果某个方法没有使用this,则应该申明为静态方法
-    - false
+    - off
   default-case: # switch 必须包含一个 default
     - error
   no-alert: # 不允许有 alert

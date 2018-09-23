@@ -2,14 +2,14 @@ const mysql = require('mysql');
 const Emitter = require('events');
 const debug = require('debug')('cancay');
 const config = require('../config');
+const logger = require('./logger');
 
 class MySQLExtends extends Emitter {
-  constructor(app) {
+  constructor() {
     super();
 
-    this.app = app;
     this.config = config.mysql;
-    this.logger = app.logger;
+    this.logger = logger;
 
     const { host, user, database } = this.config;
 
@@ -89,11 +89,13 @@ class MySQLExtends extends Emitter {
       }
 
       if (err.code === 'ECONNREFUSED'){
-        await sleep(this.retry_interval);
+        // await sleep(this.retry_interval);
+
         this.init();
         this.retry -= 1;
         this.logger.warn('MySQL: %s', err.message);
         this.logger.warn('MySQL: connect retry %s', this.retry);
+
         return false;
       }
 
@@ -113,7 +115,7 @@ class MySQLExtends extends Emitter {
       sql = mysql.format(sql, params);
 
       if (this.config.debug) {
-        this.app.logger.info({ SQL: sql });
+        this.logger.info({ SQL: sql });
       }
 
       this._check();
@@ -122,7 +124,7 @@ class MySQLExtends extends Emitter {
         if (err) {
           reject(err);
 
-          this.app.logger.error(err);
+          this.logger.error(err);
 
           throw err;
         }
@@ -134,4 +136,4 @@ class MySQLExtends extends Emitter {
 
 }
 
-module.exports = MySQLExtends;
+module.exports = new MySQLExtends();

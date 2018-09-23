@@ -6,7 +6,7 @@ const loadYaml = (name) => {
   return jsYaml.safeLoad(fs.readFileSync(path.join(__dirname, `./config.${name}.yaml`), 'utf-8'));
 };
 
-module.exports = function() {
+module.exports = (function() {
   let env = process.env.NODE_ENV === 'development' ? 'env' : process.env.NODE_ENV;
   let config = {
     env,
@@ -19,9 +19,11 @@ module.exports = function() {
     if (env === config.env) {
       envConfig = loadYaml(env);
     }
+
+    return env;
   });
 
   config = Object.assign({}, config, defaultConfig, envConfig);
 
   return config;
-}();
+})();
