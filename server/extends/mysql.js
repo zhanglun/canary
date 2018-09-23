@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const Emitter = require('events');
-const debug = require('debug')('cancay');
+const debug = require('debug')('canary');
 const config = require('../config');
 const logger = require('./logger');
 

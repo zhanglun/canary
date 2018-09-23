@@ -1,11 +1,11 @@
-const debug = require('debug')('cancay');
+const debug = require('debug')('canary');
 const path = require('path');
 const glob = require('glob');
 const router = require('koa-router')();
 const { readFileSync } = require('fs');
 
 const getAssetsVersion = () => {
-  const filename = path.join(__dirname, '../public/assets/assets.json');
+  const filename = path.join(__dirname, '../../public/assets/assets.json');
   const result = readFileSync(filename);
   const assets = JSON.parse(result.toString());
 
@@ -25,22 +25,16 @@ router.get('/', async(ctx, next) => {
   });
 });
 
-glob(src, {}, (err, files) => {
-  debug('LOAD_ROUTER', files);
+const files = glob.sync(src, {});
 
-  if (err) {
-    throw err;
-  }
+debug('LOAD_ROUTER', files);
 
-  files.forEach((file) => {
-    console.log(file);
-    const ModuleRouter = require(file);
-    const moduleRouter = new ModuleRouter();
+files.forEach((file) => {
+  console.log(file);
+  const ModuleRouter = require(file);
+  const moduleRouter = new ModuleRouter();
 
-    router.use('/api', moduleRouter.routes());
-  });
+  router.use('/api', moduleRouter.routes());
 });
-
-
 
 module.exports = router.routes();
