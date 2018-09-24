@@ -23,7 +23,16 @@ app.use(bodyParser());
 app.use(router);
 
 app.use(async(ctx, next) => {
+  const start = new Date().getTime();
+  await next();
+  const ms = new Date().getTime() - start;
+
+  ctx.set('X-Response-Time', `${ms}ms`)
+});
+
+app.use(async(ctx, next) => {
   app.logger.info('Middleware: test');
+  app.logger.info('url: ', ctx.request.method, ctx.url);
 });
 
 app.on('error', err => {

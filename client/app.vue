@@ -1,9 +1,11 @@
 <style lang="less">
+  .v-pagination__item {
+    outline: none;
+  }
 </style>
 <template>
   <div class="app">
-    <h1>Hello!</h1>
-    <!-- <router-view></router-view> -->
+    <router-view></router-view>
   </div>
 </template>
 <script>

@@ -13,8 +13,12 @@ class LianjiaModel {
   async getErShouFang(options = { limit: 10, offset: 0 }) {
     let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${options.order} LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableErshoufang]);
+    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableErshoufang]);
 
-    return result;
+    return {
+      count,
+      result
+    };
   }
 
 }

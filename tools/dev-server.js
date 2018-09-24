@@ -37,6 +37,7 @@ server.use((req, res, next) => {
     path: req.url,
     host: 'localhost',
     port: app.config.port,
+    method: req.method,
     headers,
     agent: new http.Agent(),
   };
@@ -46,6 +47,7 @@ server.use((req, res, next) => {
   }
 
   const sreq = http.request(options, (sres) => {
+    res.writeHead(sres.statusCode, sres.headers);
     sres.pipe(res);
   });
 

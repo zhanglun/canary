@@ -17,7 +17,6 @@ const modules = ['lianjia'];
 const src = `${ROUTE_PATH}/**/@(${modules.join('|')}).js`;
 
 router.get('/', async(ctx, next) => {
-  console.log(123);
   const assetsVersion = getAssetsVersion();
 
   await ctx.render('index', {

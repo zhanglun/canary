@@ -20,8 +20,8 @@ class Router {
 
     console.log(controller);
 
-    router
-      .get('/ershoufang', controller.getErShouFang)
+    router.get('/ershoufang', controller.getErShouFang)
+    router.post('/ershoufang/export', controller.exportData)
 
     // wrapper.use('/lianjia', router.routes());
 

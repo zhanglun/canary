@@ -4,7 +4,7 @@ const Router = require('koa-router');
 const { readFileSync } = require('fs');
 const config = require('../config');
 
-class Router {
+class WebRouter {
   constructor() {
     this.config = config;
 
@@ -25,7 +25,6 @@ class Router {
     let router = new Router();
 
     router.get('/', async (ctx, next) => {
-      console.log(123);
       const assetsVersion = this.getAssetsVersion();
 
       await ctx.render('index', {
@@ -37,4 +36,4 @@ class Router {
   }
 }
 
-module.exports = Router;
+module.exports = WebRouter;
