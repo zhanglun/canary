@@ -7,8 +7,6 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('./webpack.dev.config');
 const app = require('../server/app');
 
-console.log(app.config);
-
 const compiler = webpack(webpackConfig);
 const server = new Express();
 

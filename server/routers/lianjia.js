@@ -17,13 +17,8 @@ class Router {
     });
     let controller = new Controller();
 
-
-    console.log(controller);
-
     router.get('/ershoufang', controller.getErShouFang)
     router.post('/ershoufang/export', controller.exportData)
-
-    // wrapper.use('/lianjia', router.routes());
 
     return router;
   }

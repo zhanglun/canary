@@ -26,10 +26,9 @@ router.get('/', async(ctx, next) => {
 
 const files = glob.sync(src, {});
 
-debug('LOAD_ROUTER', files);
 
 files.forEach((file) => {
-  console.log(file);
+  debug('LOAD_ROUTER', file);
   const ModuleRouter = require(file);
   const moduleRouter = new ModuleRouter();
 
