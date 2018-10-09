@@ -20,6 +20,8 @@ class Controller {
       query,
     );
 
+    // TODO: 过滤字段参数
+
     let options = {};
 
     options.limit = query.page_size;
@@ -27,6 +29,10 @@ class Controller {
 
     options.order_by = query.order_by || 'input_time';
     options.order = query.order || 'desc';
+
+    options.where = {
+      city: query.city || 'bj',
+    };
 
     let { result, count } = await this.lianjiaModel.getErShouFang(options);
 
@@ -79,7 +85,6 @@ class Controller {
       try {
         item.transaction = item.transaction ? JSON.parse(item.transaction) : '[]';
       } catch (error) {
-        console.log(item);
         item.transaction = item.transaction;
       }
       try {
@@ -99,9 +104,6 @@ class Controller {
         item.area_name,
         item.input_time,
       ];
-
-      // 房租的首付和月供
-
 
       // 房屋的交易信息
       item.transaction.forEach((trans) => {

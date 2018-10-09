@@ -1,5 +1,5 @@
 #!/bin/bash
-NODE=`which node`
+NODE="./node_modules/node/bin/node"
 DATE=`date +%Y-%m-%d`
 
 if [ ! -d "./bin" ]; then
