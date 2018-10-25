@@ -128,6 +128,16 @@ class Controller {
         return key;
       });
 
+      if (!resultListUpdated) {
+        resultCons[0].push('净首付');
+        resultCons[0].push('税费合计');
+        resultCons[0].push('其他费用(以实际费用为主)');
+      }
+
+      resource.push(item.cost_payment.cost_house);
+      resource.push(item.cost_payment.cost_tax);
+      resource.push(item.cost_payment.cost_jingjiren);
+
       resultListUpdated = true;
 
       resultCons.push(resource);
@@ -141,6 +151,8 @@ class Controller {
     let datestring = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
 
     ctx.attachment(`二手房信息-${datestring}.xlsx`);
+
+    console.log(resultCons[0]);
 
     ctx.body = buffer;
   }
