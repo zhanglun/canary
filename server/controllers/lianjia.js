@@ -145,7 +145,7 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{ name: 'test', data: resultCons }]);
+    let buffer = xlsx.build([{ name: '二手房', data: resultCons }]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
@@ -226,7 +226,7 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{ name: 'test', data: resultCons }]);
+    let buffer = xlsx.build([{ name: '签约', data: resultCons }]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
@@ -264,6 +264,8 @@ class Controller {
         '所在城市',
         '地址',
         '小区名称',
+        '经度',
+        '维度',
         '均价(万)',
         '建筑年代',
         '建筑类型',
@@ -283,6 +285,8 @@ class Controller {
         item.city,
         item.address,
         item.name,
+        item.lng,
+        item.lat,
         parseInt(item.average_price, 10),
         item.building_year,
         item.building_type,
@@ -301,7 +305,7 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{ name: 'test', data: resultCons }]);
+    let buffer = xlsx.build([{ name: '小区', data: resultCons }]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
