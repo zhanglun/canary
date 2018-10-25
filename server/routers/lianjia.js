@@ -19,6 +19,8 @@ class Router {
 
     router.get('/ershoufang', controller.getErShouFang)
     router.post('/ershoufang/export', controller.exportData)
+    router.post('/chengjiao/export', controller.exportChengjiaoData)
+    router.post('/xiaoqu/export', controller.exportXiaoquData)
 
     return router;
   }

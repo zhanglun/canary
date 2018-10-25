@@ -12,6 +12,14 @@
                :loading="loading2"
                :disabled="true"
                @click.native="handleExportSelected">导出选中</v-btn>
+   <v-btn color="primary"
+               :loading="loading3"
+               :disabled="loading3"
+               @click.native="handleExportChengjiao">导出成交信息</v-btn>
+   <v-btn color="primary"
+               :loading="loading4"
+               :disabled="loading4"
+               @click.native="handleExportXiaoqu">导出小区信息</v-btn>
       </v-flex>
 
       <v-flex xs2>
@@ -27,7 +35,19 @@
             target="_blank"
             method="post"
             action="/api/lianjia/ershoufang/export">
-        <input type="hidden">
+        <input type="hidden" name="city" :value="city">
+      </form>
+      <form ref="downloadChengjiaoForm"
+            target="_blank"
+            method="post"
+            action="/api/lianjia/chengjiao/export">
+        <input type="hidden" name="city" :value="city">
+      </form>
+      <form ref="downloadXiaoquForm"
+            target="_blank"
+            method="post"
+            action="/api/lianjia/xiaoqu/export">
+        <input type="hidden" name="city" :value="city">
       </form>
     </v-layout>
     <v-layout row
@@ -151,6 +171,8 @@
 
         loading: false,
         loading2: false,
+        loading3: false,
+        loading4: false,
         list: [],
         pageManger: {
           page: 2,
@@ -214,6 +236,24 @@
         setTimeout(() => {
           this.$refs.downloadForm.submit();
           this.loading = false;
+        }, 300);
+      },
+
+      handleExportChengjiao() {
+        this.loading3 =true;
+
+        setTimeout(() => {
+          this.$refs.downloadChengjiaoForm.submit();
+          this.loading3 = false;
+        }, 300);
+      },
+
+      handleExportXiaoqu() {
+        this.loading4 =true;
+
+        setTimeout(() => {
+          this.$refs.downloadXiaoquForm.submit();
+          this.loading4 = false;
         }, 300);
       },
 

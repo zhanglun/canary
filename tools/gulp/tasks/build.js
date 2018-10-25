@@ -1,7 +1,10 @@
 const babel = require('gulp-babel');
 const runSequence = require('run-sequence');
-const webpack = require('webpack-stream');
-const webpackCofnig = require('../../webpack.pro.config.js');
+const webpack = require('webpack');
+const webpackStream = require('webpack-stream');
+const webpackConfig = require('../../webpack.pro.config.js');
+
+console.log(webpackConfig);
 
 module.exports = (gulp, common, plugins) => {
   const { root } = common.build;
@@ -9,7 +12,7 @@ module.exports = (gulp, common, plugins) => {
   gulp.task('build:client', () => {
     return gulp
       .src(`${root}/client/index.js`)
-      .pipe(webpack(webpackCofnig))
+      .pipe(webpackStream(webpackConfig, webpack))
       .pipe(gulp.dest(`${root}/public/assets`));
   });
 
