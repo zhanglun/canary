@@ -22,6 +22,8 @@ class Router {
     router.post('/chengjiao/export', controller.exportChengjiaoData)
     router.post('/xiaoqu/export', controller.exportXiaoquData)
 
+    router.get('/overviews', controller.getOverview)
+
     return router;
   }
 }
