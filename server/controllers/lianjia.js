@@ -149,8 +149,7 @@ class Controller {
   async getErShouFang(ctx, next) {
     let query = ctx.query;
 
-    query = Object.assign(
-      {
+    query = Object.assign({
         page_size: 10,
         page: 1,
       },
@@ -171,7 +170,10 @@ class Controller {
       city: query.city || 'bj',
     };
 
-    let { result, count } = await this.lianjiaModel.getErShouFang(options);
+    let {
+      result,
+      count
+    } = await this.lianjiaModel.getErShouFang(options);
 
     result.forEach((item) => {
       try {
@@ -198,10 +200,7 @@ class Controller {
     let query = ctx.request.body;
     let options = {};
 
-    console.log(query);
-
-    query = Object.assign(
-      {
+    query = Object.assign({
         page_size: 100000,
         page: 1,
       },
@@ -217,9 +216,13 @@ class Controller {
       city: query.city || 'bj',
     };
 
-    let { result } = await this.lianjiaModel.getErShouFang(options);
+    let {
+      result
+    } = await this.lianjiaModel.getErShouFang(options);
 
-    let resultCons = [['标题', '网页源地址', '总价(万)', '单价(万)', '楼盘', '板块', '录入时间']];
+    let resultCons = [
+      ['标题', '网页源地址', '总价(万)', '单价(万)', '楼盘', '板块', '录入时间']
+    ];
     let resultListUpdated = false;
 
     result.forEach((item) => {
@@ -228,19 +231,19 @@ class Controller {
       try {
         item.transaction_attributes = item.transaction_attributes ? JSON.parse(item.transaction_attributes) : '[]';
       } catch (error) {
-        item.transaction_attributes = item.transaction_attributes;
+        item.transaction_attributes = [];
       }
 
       try {
         item.base_attributes = item.base_attributes ? JSON.parse(item.base_attributes) : '[]';
       } catch (error) {
-        item.base_attributes = item.base_attributes;
+        item.base_attributes = [];
       }
 
       try {
         item.cost_payment = item.cost_payment ? JSON.parse(item.cost_payment) : '{}';
       } catch (error) {
-        item.cost_payment = item.cost_payment;
+        item.cost_payment = {};
       }
 
       item.transactionAttributesMap = {};
@@ -258,11 +261,11 @@ class Controller {
 
       // 房屋的交易信息
       item.transaction_attributes.forEach((trans) => {
-        item.transactionAttributesMap[trans.label] = trans.value;
+        item.transactionAttributesMap[trans.label] = trans.value || '暂无信息';
       });
 
       item.base_attributes.forEach((trans) => {
-        item.baseAttrbutesMap[trans.label] = trans.value;
+        item.baseAttrbutesMap[trans.label] = trans.value || '暂无信息';
       });
 
       Object.keys(item.transactionAttributesMap).forEach((key) => {
@@ -270,20 +273,20 @@ class Controller {
           resultCons[0].push(key);
         }
 
-        resource.push(item.transactionAttributesMap[key]);
+        resource.push(item.transactionAttributesMap[key] || '暂无信息');
 
         return key;
       });
 
-      Object.keys(item.baseAttrbutesMap).forEach((key) => {
-        if (!resultListUpdated) {
-          resultCons[0].push(key);
-        }
+      // Object.keys(item.baseAttrbutesMap).forEach((key) => {
+      //   if (!resultListUpdated) {
+      //     resultCons[0].push(key);
+      //   }
 
-        resource.push(item.baseAttrbutesMap[key]);
+      //   resource.push(item.baseAttrbutesMap[key]);
 
-        return key;
-      });
+      //   return key;
+      // });
 
       if (!resultListUpdated) {
         resultCons[0].push('净首付');
@@ -291,12 +294,17 @@ class Controller {
         resultCons[0].push('其他费用(以实际费用为主)');
       }
 
-      resource.push(item.cost_payment.cost_house);
-      resource.push(item.cost_payment.cost_tax);
-      resource.push(item.cost_payment.cost_jingjiren);
+      resource.push(item.cost_payment.cost_house || '暂无信息');
+      resource.push(item.cost_payment.cost_tax || '暂无信息');
+      resource.push(item.cost_payment.cost_jingjiren || '暂无信息');
 
-      let community_meta = JSON.parse(item.community_meta || '{}');
-      let metaString = '';
+      let community_meta = {};
+      try {
+        community_meta = JSON.parse(item.community_meta || '{}');
+      } catch (error) {
+        community_meta = {};
+      }
+      let metaString = '暂无信息';
 
       if (community_meta.resblock) {
         if (!resultListUpdated) {
@@ -314,11 +322,14 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{ name: '二手房', data: resultCons }]);
+    let buffer = xlsx.build([{
+      name: '二手房',
+      data: resultCons
+    }]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() +
-      1}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}`;
+      1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
 
     ctx.attachment(`链家网数据-二手房信息-${CITY_DICT[query.city]}-${datestring}.xlsx`);
 
@@ -331,8 +342,7 @@ class Controller {
     let query = ctx.request.body;
     let options = {};
 
-    query = Object.assign(
-      {
+    query = Object.assign({
         page_size: 100000,
         page: 1,
       },
@@ -341,42 +351,47 @@ class Controller {
     options.limit = query.page_size;
     options.offset = query.page_size * (query.page - 1);
 
-    options.order_by = query.order_by || 'sign_at';
+    options.order_by = query.order_by || 'input_at';
     options.order = query.order || 'desc';
 
     options.where = {
       city: query.city || 'bj',
+      city_area: '闵行',
     };
 
-    let { result } = await this.lianjiaModel.getChengjiao(options);
+    let {
+      result
+    } = await this.lianjiaModel.getChengjiao(options);
     let d = new Date();
     let datestring = `${d.getFullYear()}-${d.getMonth() +
-      1}-${d.getDate()}-${d.getHours()}-${d.getMinutes()}`;
+      1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
     let writer = new Writer();
 
     // writer.getReadStream().pipe(fs.createWriteStream(`链家网数据-成交信息-${CITY_DICT[query.city]}-${datestring}.xlsx`));
 
-    writer.defineColumns([
-      { width: 15 }, // width is in 'characters'
-      { width: 10 },
-      { width: 10 },
-      { width: 10 },
-      { width: 10 },
-      { width: 20 },
-      { width: 40 },
-      { width: 10 },
+    writer.defineColumns([{
+        width: 30
+      }, // width is in 'characters'
+      {
+        width: 10
+      },
     ]);
 
     result.forEach((item) => {
-      let community_meta = JSON.parse(item.community_meta || '{}');
+      let community_meta = {};
+      try {
+        community_meta = JSON.parse(item.community_meta || '{}');
+      } catch (error) {
+        community_meta = {};
+      }
       let metaString = '';
 
-      if (community_meta.resblock) {
+      if (community_meta && community_meta.resblock) {
         metaString = `目前有 ${community_meta.resblock.sellNum} 套房源出售中, 挂牌均价 ${community_meta.resblock.unitPrice}元/平`;
       }
 
       writer.addRow({
-        成交时间: moment(item.sign_at).format('YYYY-MM-DD'),
+        成交时间: moment(item.sign_at).format('YYYY-MM-DD hh:mm'),
         成交方式: item.sign_method,
         所在城市: CITY_DICT[item.city] || item.city,
         所在城区: item.city_area,
@@ -411,8 +426,7 @@ class Controller {
     let query = ctx.request.body;
     let options = {};
 
-    query = Object.assign(
-      {
+    query = Object.assign({
         page_size: 100000,
         page: 1,
       },
@@ -429,7 +443,9 @@ class Controller {
       city: query.city || 'bj',
     };
 
-    let { result } = await this.lianjiaModel.getXiaoqu(options);
+    let {
+      result
+    } = await this.lianjiaModel.getXiaoqu(options);
 
     let resultCons = [
       [
@@ -477,7 +493,10 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{ name: '小区', data: resultCons }]);
+    let buffer = xlsx.build([{
+      name: '小区',
+      data: resultCons
+    }]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() +
