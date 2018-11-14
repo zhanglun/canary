@@ -19,6 +19,10 @@
                :loading="loading4"
                :disabled="loading4"
                @click.native="handleExportXiaoqu">导出小区信息</v-btn>
+        <v-btn color="primary"
+               :loading="loading5"
+               :disabled="loading5"
+               @click.native="handleExportZufang">导出租房信息</v-btn>
       </v-flex>
 
       <v-flex xs2>
@@ -49,6 +53,14 @@
             target="_blank"
             method="post"
             action="/api/lianjia/xiaoqu/export">
+        <input type="hidden"
+               name="city"
+               :value="city">
+      </form>
+      <form ref="downloadZufangForm"
+            target="_blank"
+            method="post"
+            action="/api/lianjia/zufang/export">
         <input type="hidden"
                name="city"
                :value="city">
@@ -487,6 +499,7 @@
         loading2: false,
         loading3: false,
         loading4: false,
+        loading5: false,
         overviews: {},
         pageManger: {
           page: 2,
@@ -568,6 +581,14 @@
         setTimeout(() => {
           this.$refs.downloadXiaoquForm.submit();
           this.loading4 = false;
+        }, 300);
+      },
+      handleExportZufang() {
+        this.loading5 = true;
+
+        setTimeout(() => {
+          this.$refs.downloadZufangForm.submit();
+          this.loading5 = false;
         }, 300);
       },
 

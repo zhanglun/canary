@@ -2,9 +2,10 @@ const mysql = require('../extends/mysql');
 
 class LianjiaModel {
   constructor() {
-    this.tableErshoufang = 'ershoufang';
-    this.tableChengjiao = 'chengjiao';
-    this.tableXiaoqu = 'xiaoqu';
+    this.tableErshoufang = 'lianjia_ershoufang';
+    this.tableChengjiao = 'lianjia_chengjiao';
+    this.tableXiaoqu = 'lianjia_xiaoqu';
+    this.tableZufang= 'lianjia_zufang';
   }
 
   /**
@@ -58,17 +59,32 @@ class LianjiaModel {
     };
   }
 
+  async getZufang(options = { limit: 10, offset: 0 }) {
+    let sql = `SELECT * FROM ?? ORDER BY ${options.order_by} ${
+      options.order
+    } LIMIT ${options.limit} OFFSET ${options.offset}`;
+    let result = await mysql.query(sql, [this.tableZufang]);
+    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableZufang]);
+
+    return {
+      count,
+      result,
+    };
+  }
+
   async getOverview() {
     let sql = 'SELECT COUNT(id) as total from ??';
 
     let [ ershoufang ] = await mysql.query(sql, [this.tableErshoufang]);
     let [ chengjiao ] = await mysql.query(sql, [this.tableChengjiao]);
     let [ xiaoqu ] = await mysql.query(sql, [this.tableXiaoqu]);
+    let [ zufang ] = await mysql.query(sql, [this.tableZufang]);
 
     return {
       ershoufang: ershoufang.total,
       chengjiao: chengjiao.total,
       xiaoqu: xiaoqu.total,
+      zufang: zufang.total,
     };
   }
 }

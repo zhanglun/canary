@@ -143,6 +143,7 @@ class Controller {
     this.exportData = this.exportData.bind(this);
     this.exportChengjiaoData = this.exportChengjiaoData.bind(this);
     this.exportXiaoquData = this.exportXiaoquData.bind(this);
+    this.exportZufangData = this.exportZufangData.bind(this);
     this.getOverview = this.getOverview.bind(this);
   }
 
@@ -163,7 +164,7 @@ class Controller {
     options.limit = query.page_size;
     options.offset = query.page_size * (query.page - 1);
 
-    options.order_by = query.order_by || 'input_time';
+    options.order_by = query.order_by || 'input_at';
     options.order = query.order || 'desc';
 
     options.where = {
@@ -442,7 +443,7 @@ class Controller {
     options.where = {
       city: query.city || 'bj',
     };
-
+    console.log(this.lianjiaModel);
     let {
       result
     } = await this.lianjiaModel.getXiaoqu(options);
@@ -504,6 +505,94 @@ class Controller {
 
     ctx.attachment(
       `链家网小区数据小区信息-${datestring}-${CITY_DICT[query.city] || query.city}.xlsx`,
+    );
+
+    ctx.body = buffer;
+  }
+
+ async exportZufangData(ctx, next) {
+    let query = ctx.request.body;
+    let options = {};
+
+    query = Object.assign({
+        page_size: 100000,
+        page: 1,
+      },
+      query,
+    );
+    options.limit = query.page_size;
+    options.offset = query.page_size * (query.page - 1);
+
+    options.order_by = query.order_by || 'publish_at';
+    options.order = query.order || 'desc';
+
+    query.city = query.city || 'bj';
+    options.where = {
+      city: query.city || 'bj',
+    };
+
+    let {
+      result
+    } = await this.lianjiaModel.getZufang(options);
+
+    let resultCons = [
+      [
+        '所在城市',
+        '所在城区',
+        '所在地区',
+        '所在小区',
+        '租金',
+        '租金单位',
+        '发布时间',
+        '租赁状态',
+        '户型',
+        '楼层',
+        '朝向',
+        '面积',
+        '套内面积',
+        '地铁信息',
+
+      ],
+    ];
+
+    result.forEach((item) => {
+      let resource = [
+        CITY_DICT[item.city] || item.city || '北京',
+        item.city_area,
+        item.area_name,
+        item.community_name,
+        item.monthly_rent,
+        item.monthly_rent_unit,
+        moment(item.publish_at).format('YYYY-MM-DD hh:mm'),
+        item.status,
+        item.building_structure.replace('整租', '').trim(),
+        item.building_floor,
+        item.building_towards,
+        item.floor_area,
+        item.floor_inside_area,
+        item.subway_info,
+        item.origin_title,
+        item.origin_url,
+      ];
+
+      resultCons.push(resource);
+
+      return item;
+    });
+
+    console.log(result);
+
+    let buffer = xlsx.build([{
+      name: '租房',
+      data: resultCons
+    }]);
+    let d = new Date();
+
+    let datestring = `${d.getFullYear()}-${d.getMonth() +
+      1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
+
+    ctx.attachment(
+      `链家网租房信息-${datestring}-${CITY_DICT[query.city] || query.city}.xlsx`,
     );
 
     ctx.body = buffer;

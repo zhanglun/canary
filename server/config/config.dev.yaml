@@ -8,5 +8,5 @@ mysql:
   port: ''
   user: 'root'
   password: ''
-  database: 'lianjia'
+  database: 'house'
   debug: true
