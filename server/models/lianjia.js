@@ -2,10 +2,10 @@ const mysql = require('../extends/mysql');
 
 class LianjiaModel {
   constructor() {
-    this.tableErshoufang = 'lianjia_ershoufang';
-    this.tableChengjiao = 'lianjia_chengjiao';
-    this.tableXiaoqu = 'lianjia_xiaoqu';
-    this.tableZufang= 'lianjia_zufang';
+    this.tableErshoufang = 'ershoufang';
+    this.tableChengjiao = 'chengjiao';
+    this.tableXiaoqu = 'xiaoqu';
+    this.tableZufang= 'zufang';
   }
 
   /**
@@ -17,7 +17,7 @@ class LianjiaModel {
       options.order
     } LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableErshoufang]);
-    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableErshoufang]);
+    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableErshoufang]);
 
     return {
       count,
@@ -30,7 +30,7 @@ class LianjiaModel {
       options.order
     } LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableChengjiao]);
-    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableChengjiao]);
+    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableChengjiao]);
 
     return {
       count,
@@ -39,7 +39,7 @@ class LianjiaModel {
   }
 
   async getChengjiaoCount(options = { limit: 10, offset: 0 }) {
-    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableChengjiao]);
+    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableChengjiao]);
 
     return {
       count,
@@ -51,7 +51,7 @@ class LianjiaModel {
       options.order
     } LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableXiaoqu]);
-    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableXiaoqu]);
+    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableXiaoqu]);
 
     return {
       count,
@@ -64,7 +64,7 @@ class LianjiaModel {
       options.order
     } LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableZufang]);
-    let count = await mysql.query('SELECT count(*) FROM ??', [this.tableZufang]);
+    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableZufang]);
 
     return {
       count,

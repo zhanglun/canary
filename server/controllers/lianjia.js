@@ -3,137 +3,7 @@ const fs = require('fs');
 const xlsx = require('node-xlsx');
 const LianjiaModel = require('../models/lianjia');
 const moment = require('moment');
-
-const CITY_DICT = {
-  cz: '滁州',
-  hf: '合肥',
-  bj: '北京',
-  cq: '重庆',
-  fz: '福州',
-  ly: '龙岩',
-  quanzhou: '泉州',
-  xm: '厦门',
-  zhangzhou: '漳州',
-  dg: '东莞',
-  fs: '佛山',
-  gz: '广州',
-  hui: '惠州',
-  qy: '清远',
-  sz: '深圳',
-  zh: '珠海',
-  zhanjiang: '湛江',
-  zs: '中山',
-  gy: '贵阳',
-  bh: '北海',
-  huangshi: '黄石',
-  hg: '黄冈',
-  wh: '武汉',
-  xy: '襄阳',
-  xn: '咸宁',
-  yichang: '宜昌',
-  cs: '长沙',
-  changde: '常德',
-  zhuzhou: '株洲',
-  bd: '保定',
-  chengde: '承德',
-  hd: '邯郸',
-  hs: '衡水',
-  lf: '廊坊',
-  qhd: '秦皇岛',
-  sjz: '石家庄',
-  xt: '邢台',
-  zjk: '张家口',
-  bt: '保亭',
-  cm: '澄迈',
-  dz: '儋州',
-  da: '定安',
-  hk: '海口',
-  lg: '临高',
-  ld: '乐东',
-  ls: '陵水',
-  qh: '琼海',
-  qz: '琼中',
-  san: '三亚',
-  wzs: '五指山',
-  wc: '文昌',
-  wn: '万宁',
-  kf: '开封',
-  luoyang: '洛阳',
-  xinxiang: '新乡',
-  xc: '许昌',
-  zz: '郑州',
-  hrb: '哈尔滨',
-  ha: '淮安',
-  nj: '南京',
-  nt: '南通',
-  su: '苏州',
-  wx: '无锡',
-  xz: '徐州',
-  zj: '镇江',
-  cc: '长春',
-  nc: '南昌',
-  sr: '上饶',
-  dl: '大连',
-  sy: '沈阳',
-  hhht: '呼和浩特',
-  yinchuan: '银川',
-  sh: '上海',
-  cd: '成都',
-  dy: '德阳',
-  dazhou: '达州',
-  leshan: '乐山',
-  mianyang: '绵阳',
-  ms: '眉山',
-  nanchong: '南充',
-  jn: '济南',
-  qd: '青岛',
-  wf: '潍坊',
-  weihai: '威海',
-  yt: '烟台',
-  zb: '淄博',
-  xa: '西安',
-  xianyang: '咸阳',
-  jz: '晋中',
-  ty: '太原',
-  tj: '天津',
-  dali: '大理',
-  km: '昆明',
-  xsbn: '西双版纳',
-  hz: '杭州',
-  jx: '嘉兴',
-  nb: '宁波',
-  sx: '绍兴',
-};
-
-class ExcelWriteExecutor {
-  /**
-   * 构造方法
-   * @param path 路径
-   * @param options
-   */
-  constructor(path, options = {}) {
-    this.path = path;
-    options.out = path;
-    this.options = options;
-    this.writer = new Writer(this.path, this.options);
-    this.writer.getReadStream().pipe(fs.createWriteStream(this.path));
-  }
-  addRow(row) {
-    this.writer.addRow(row);
-  }
-  addRows(rows) {
-    this.writer.addRows(rows);
-  }
-  /**
-   * 输出
-   */
-  execute() {
-    return new Promise((resolve) => {
-      this.writer.finalize();
-      setTimeout(resolve, 50); //延迟50毫秒是因为 finalize 调用结束之后，excel打开会报错，可能是没写入完成的原因，加了延迟之后正常，延迟值根据需要自己测试可以更改
-    });
-  }
-}
+const CITY_DICT = require('./city');
 
 class Controller {
   constructor() {
@@ -148,28 +18,8 @@ class Controller {
   }
 
   async getErShouFang(ctx, next) {
-    let query = ctx.query;
-
-    query = Object.assign({
-        page_size: 10,
-        page: 1,
-      },
-      query,
-    );
-
-    // TODO: 过滤字段参数
-
-    let options = {};
-
-    options.limit = query.page_size;
-    options.offset = query.page_size * (query.page - 1);
-
-    options.order_by = query.order_by || 'input_at';
-    options.order = query.order || 'desc';
-
-    options.where = {
-      city: query.city || 'bj',
-    };
+    let options = ctx.__lianjia_query_options;
+    let query = ctx.request.query;
 
     let {
       result,
@@ -198,24 +48,8 @@ class Controller {
   }
 
   async exportData(ctx, next) {
-    let query = ctx.request.body;
-    let options = {};
-
-    query = Object.assign({
-        page_size: 100000,
-        page: 1,
-      },
-      query,
-    );
-    options.limit = query.page_size;
-    options.offset = query.page_size * (query.page - 1);
-
-    options.order_by = query.order_by || 'input_at';
-    options.order = query.order || 'desc';
-
-    options.where = {
-      city: query.city || 'bj',
-    };
+    let options = ctx.__lianjia_query_options;
+    let query = ctx.request.query;
 
     let {
       result
@@ -340,25 +174,8 @@ class Controller {
   }
 
   async exportChengjiaoData(ctx, next) {
-    let query = ctx.request.body;
-    let options = {};
-
-    query = Object.assign({
-        page_size: 100000,
-        page: 1,
-      },
-      query,
-    );
-    options.limit = query.page_size;
-    options.offset = query.page_size * (query.page - 1);
-
-    options.order_by = query.order_by || 'input_at';
-    options.order = query.order || 'desc';
-
-    options.where = {
-      city: query.city || 'bj',
-      city_area: '闵行',
-    };
+    let options = ctx.__lianjia_query_options;
+    let query = ctx.request.query;
 
     let {
       result
@@ -424,26 +241,8 @@ class Controller {
   }
 
   async exportXiaoquData(ctx, next) {
-    let query = ctx.request.body;
-    let options = {};
-
-    query = Object.assign({
-        page_size: 100000,
-        page: 1,
-      },
-      query,
-    );
-    options.limit = query.page_size;
-    options.offset = query.page_size * (query.page - 1);
-
-    options.order_by = query.order_by || 'input_at';
-    options.order = query.order || 'desc';
-
-    query.city = query.city || 'bj';
-    options.where = {
-      city: query.city || 'bj',
-    };
-    console.log(this.lianjiaModel);
+    let options = ctx.__lianjia_query_options;
+    let query = ctx.request.query;
     let {
       result
     } = await this.lianjiaModel.getXiaoqu(options);
@@ -511,25 +310,8 @@ class Controller {
   }
 
  async exportZufangData(ctx, next) {
-    let query = ctx.request.body;
-    let options = {};
-
-    query = Object.assign({
-        page_size: 100000,
-        page: 1,
-      },
-      query,
-    );
-    options.limit = query.page_size;
-    options.offset = query.page_size * (query.page - 1);
-
-    options.order_by = query.order_by || 'publish_at';
-    options.order = query.order || 'desc';
-
-    query.city = query.city || 'bj';
-    options.where = {
-      city: query.city || 'bj',
-    };
+    let options = ctx.__lianjia_query_options;
+    let query = ctx.request.query;
 
     let {
       result
@@ -551,13 +333,14 @@ class Controller {
         '面积',
         '套内面积',
         '地铁信息',
-
+        '网页标题',
+        '网页源地址',
       ],
     ];
 
     result.forEach((item) => {
       let resource = [
-        CITY_DICT[item.city] || item.city || '北京',
+        CITY_DICT[item.city] || item.city,
         item.city_area,
         item.area_name,
         item.community_name,
@@ -580,7 +363,7 @@ class Controller {
       return item;
     });
 
-    console.log(result);
+    console.log(result.length);
 
     let buffer = xlsx.build([{
       name: '租房',
