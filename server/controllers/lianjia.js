@@ -21,10 +21,7 @@ class Controller {
     let options = ctx.__lianjia_query_options;
     let query = ctx.request.query;
 
-    let {
-      result,
-      count
-    } = await this.lianjiaModel.getErShouFang(options);
+    let { result, count } = await this.lianjiaModel.getErShouFang(options);
 
     result.forEach((item) => {
       try {
@@ -51,20 +48,18 @@ class Controller {
     let options = ctx.__lianjia_query_options;
     let query = ctx.request.query;
 
-    let {
-      result
-    } = await this.lianjiaModel.getErShouFang(options);
+    let { result } = await this.lianjiaModel.getErShouFang(options);
 
-    let resultCons = [
-      ['标题', '网页源地址', '总价(万)', '单价(万)', '楼盘', '板块', '录入时间']
-    ];
+    let resultCons = [['标题', '网页源地址', '总价(万)', '单价(万)', '楼盘', '板块', '录入时间']];
     let resultListUpdated = false;
 
     result.forEach((item) => {
       item.transaction_attributes = item.transaction_attributes.replace('\n', ' ');
 
       try {
-        item.transaction_attributes = item.transaction_attributes ? JSON.parse(item.transaction_attributes) : '[]';
+        item.transaction_attributes = item.transaction_attributes
+          ? JSON.parse(item.transaction_attributes)
+          : '[]';
       } catch (error) {
         item.transaction_attributes = [];
       }
@@ -145,7 +140,9 @@ class Controller {
         if (!resultListUpdated) {
           resultCons[0].push('该小区其他情况');
         }
-        metaString = `目前有 ${community_meta.resblock.sellNum} 套房源出售中, 挂牌均价 ${community_meta.resblock.unitPrice}元/平`;
+        metaString = `目前有 ${community_meta.resblock.sellNum} 套房源出售中, 挂牌均价 ${
+          community_meta.resblock.unitPrice
+        }元/平`;
       }
 
       resource.push(metaString);
@@ -157,10 +154,12 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{
-      name: '二手房',
-      data: resultCons
-    }]);
+    let buffer = xlsx.build([
+      {
+        name: '二手房',
+        data: resultCons,
+      },
+    ]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() +
@@ -177,75 +176,125 @@ class Controller {
     let options = ctx.__lianjia_query_options;
     let query = ctx.request.query;
 
-    let {
-      result
-    } = await this.lianjiaModel.getChengjiao(options);
+    let { count } = await this.lianjiaModel.getChengjiaoCountByCity(options.where.city, options);
+
+    let steps = Math.ceil(count / 10000);
+
+    console.log(steps);
+    let promise = [];
+
+    for (let i = 0; i < steps; i++) {
+      let options = JSON.parse(JSON.stringify(ctx.__lianjia_query_options));
+
+      options.limit = 10000;
+      options.offset = 10000 * i;
+
+      promise.push(this.lianjiaModel.getChengjiao(options));
+    }
+
     let d = new Date();
     let datestring = `${d.getFullYear()}-${d.getMonth() +
-      1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
+      1}-${d.getDate()}-${d.getHours()}${d.getMinutes()}`;
     let writer = new Writer();
 
-    // writer.getReadStream().pipe(fs.createWriteStream(`链家网数据-成交信息-${CITY_DICT[query.city]}-${datestring}.xlsx`));
+    writer
+      .getReadStream()
+      .pipe(
+        fs.createWriteStream(
+          `链家网数据-成交信息-${CITY_DICT[options.where.city]}-${datestring}.xlsx`,
+        ),
+      );
 
-    writer.defineColumns([{
-        width: 30
+    writer.defineColumns([
+      {
+        width: 30,
       }, // width is in 'characters'
       {
-        width: 10
+        width: 10,
       },
     ]);
 
-    result.forEach((item) => {
-      let community_meta = {};
-      try {
-        community_meta = JSON.parse(item.community_meta || '{}');
-      } catch (error) {
-        community_meta = {};
-      }
-      let metaString = '';
+    // 构建队列
+    function queue(arr, cb) {
+      let sequence = Promise.resolve();
 
-      if (community_meta && community_meta.resblock) {
-        metaString = `目前有 ${community_meta.resblock.sellNum} 套房源出售中, 挂牌均价 ${community_meta.resblock.unitPrice}元/平`;
-      }
+      arr.forEach((promise, i) => {
+        sequence = sequence
+          .then(async () => {
+            let { result } = await promise;
 
-      writer.addRow({
-        成交时间: moment(item.sign_at).format('YYYY-MM-DD hh:mm'),
-        成交方式: item.sign_method,
-        所在城市: CITY_DICT[item.city] || item.city,
-        所在城区: item.city_area,
-        所在地区: item.area_name,
-        所在小区: item.community_name,
-        小区其他情况: metaString,
-        '总价(万)': parseInt(item.total_price || 0, 10),
-        '单价(万)': parseInt(item.unit_price || 0, 10),
-        房屋构成: item.building_structure,
-        楼层: item.building_floor,
-        朝向: item.building_towards,
-        其他信息: item.building_meta,
-        房屋大小: item.building_size,
-        建造年份: item.building_year,
-        建筑形态: item.building_style,
-        网页标题: item.origin_title,
-        网页源地址: {
-          value: item.origin_url,
-          hyperlink: item.origin_url,
-        },
-        采集时间: moment(item.input_at).format('YYYY-MM-DD hh:mm'),
+            console.log(i);
+            cb(result, i);
+
+            return result;
+          });
       });
+
+      return sequence;
+    }
+
+    let cb = (result, i) => {
+      result.forEach((item) => {
+        let community_meta = {};
+        try {
+          community_meta = JSON.parse(item.community_meta || '{}');
+        } catch (error) {
+          community_meta = {};
+        }
+        let metaString = '';
+
+        if (community_meta && community_meta.resblock) {
+          metaString = `目前有 ${community_meta.resblock.sellNum} 套房源出售中, 挂牌均价 ${
+            community_meta.resblock.unitPrice
+          }元/平`;
+        }
+
+        writer.addRow({
+          成交时间: moment(item.sign_at).format('YYYY-MM-DD hh:mm'),
+          成交方式: item.sign_method,
+          所在城市: CITY_DICT[item.city] || item.city,
+          所在城区: item.city_area,
+          所在地区: item.area_name,
+          所在小区: item.community_name,
+          小区其他情况: metaString,
+          '总价(万)': parseInt(item.total_price || 0, 10),
+          '单价(万)': parseInt(item.unit_price || 0, 10),
+          房屋构成: item.building_structure,
+          楼层: item.building_floor,
+          朝向: item.building_towards,
+          其他信息: item.building_meta,
+          房屋大小: item.building_size,
+          建造年份: item.building_year,
+          建筑形态: item.building_style,
+          网页标题: item.origin_title,
+          网页源地址: {
+            value: item.origin_url,
+            hyperlink: item.origin_url,
+          },
+          采集时间: moment(item.input_at).format('YYYY-MM-DD hh:mm'),
+        });
+      });
+
+      if (i == steps.length - 1) {
+        writer.finalize();
+      }
+    };
+
+    // 执行队列
+    queue(promise, cb).then((data) => {
+      console.log('data', data.length); // abc
     });
 
-    writer.finalize();
+    // // ctx.attachment(`链家网数据-成交信息-${CITY_DICT[query.city]}-${datestring}.xlsx`);
+    // // ctx.body = writer.getReadStream();
 
-    ctx.attachment(`链家网数据-成交信息-${CITY_DICT[query.city]}-${datestring}.xlsx`);
-    ctx.body = writer.getReadStream();
+    ctx.body = 'ok';
   }
 
   async exportXiaoquData(ctx, next) {
     let options = ctx.__lianjia_query_options;
     let query = ctx.request.query;
-    let {
-      result
-    } = await this.lianjiaModel.getXiaoqu(options);
+    let { result } = await this.lianjiaModel.getXiaoqu(options);
 
     let resultCons = [
       [
@@ -293,10 +342,12 @@ class Controller {
       return item;
     });
 
-    let buffer = xlsx.build([{
-      name: '小区',
-      data: resultCons
-    }]);
+    let buffer = xlsx.build([
+      {
+        name: '小区',
+        data: resultCons,
+      },
+    ]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() +
@@ -309,13 +360,11 @@ class Controller {
     ctx.body = buffer;
   }
 
- async exportZufangData(ctx, next) {
+  async exportZufangData(ctx, next) {
     let options = ctx.__lianjia_query_options;
     let query = ctx.request.query;
 
-    let {
-      result
-    } = await this.lianjiaModel.getZufang(options);
+    let { result } = await this.lianjiaModel.getZufang(options);
 
     let resultCons = [
       [
@@ -365,18 +414,18 @@ class Controller {
 
     console.log(result.length);
 
-    let buffer = xlsx.build([{
-      name: '租房',
-      data: resultCons
-    }]);
+    let buffer = xlsx.build([
+      {
+        name: '租房',
+        data: resultCons,
+      },
+    ]);
     let d = new Date();
 
     let datestring = `${d.getFullYear()}-${d.getMonth() +
       1}-${d.getDate()}-${d.getHours()}:${d.getMinutes()}`;
 
-    ctx.attachment(
-      `链家网租房信息-${datestring}-${CITY_DICT[query.city] || query.city}.xlsx`,
-    );
+    ctx.attachment(`链家网租房信息-${datestring}-${CITY_DICT[query.city] || query.city}.xlsx`);
 
     ctx.body = buffer;
   }

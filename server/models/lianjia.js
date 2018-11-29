@@ -26,24 +26,28 @@ class LianjiaModel {
   }
 
   async getChengjiao(options = { limit: 10, offset: 0 }) {
-    let sql = `SELECT * FROM ?? WHERE city = '${options.where.city}' and sign_at >= '2016-01-01 00:00' and sign_at < '2017-01-01 00:00' ORDER BY ${options.order_by} ${
+    let sql = `SELECT * FROM ?? WHERE city = '${options.where.city}' ORDER BY ${options.order_by} ${
       options.order
     } LIMIT ${options.limit} OFFSET ${options.offset}`;
     let result = await mysql.query(sql, [this.tableChengjiao]);
-    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableChengjiao]);
+    // let count = await mysql.query('SELECT count(id) FROM ??', [this.tableChengjiao]);
 
     return {
-      count,
+      // count,
       result,
     };
   }
 
   async getChengjiaoCount(options = { limit: 10, offset: 0 }) {
-    let count = await mysql.query('SELECT count(id) FROM ??', [this.tableChengjiao]);
+    let [ count ] = await mysql.query('SELECT count(id) as count FROM ?? ', [this.tableChengjiao]);
 
-    return {
-      count,
-    };
+    return count;
+  }
+
+  async getChengjiaoCountByCity(city, options = { limit: 10, offset: 0 }) {
+    let [ count ] = await mysql.query('SELECT count(id) as count FROM ?? WHERE city = ?', [this.tableChengjiao, city]);
+
+    return count;
   }
 
   async getXiaoqu(options = { limit: 10, offset: 0 }) {

@@ -2,11 +2,12 @@ module.exports = (app) => {
   return async (ctx, next) => {
     let query = ctx.query;
 
-    query = Object.assign({
-       page_size: 10000000,
-       page: 1,
-     },
-     query,
+    query = Object.assign(
+      {
+        page_size: 10000000,
+        page: 1,
+      },
+      query,
     );
 
     let options = {};
